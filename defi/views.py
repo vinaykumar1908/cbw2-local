@@ -16,7 +16,7 @@ from django.utils import timezone
 from django.core.files.storage import FileSystemStorage
 from datetime import date, datetime, timedelta
 
-def Import_Excel_pandas(request, Serial):
+def DPCExcelImport(request, Serial):
     print("---------")
     print(Serial)
     if request.method == 'POST' and request.FILES['myfile']:      
@@ -33,10 +33,29 @@ def Import_Excel_pandas(request, Serial):
         for dbframe in dbframe.itertuples():
             a = DPC.objects.filter(DPCName=dbframe.DPCName).first()
             e = a.POHDate
-            b = DPCArea.objects.filter(DPCArea=dbframe.DPCDefArea).first()
-            c = DPCSec.objects.filter(DPCSec=dbframe.DPCSecArea).first()
+            if DPCArea.objects.filter(DPCArea=dbframe.DPCDefArea).exists():
+                b = DPCArea.objects.filter(DPCArea=dbframe.DPCDefArea).first()
+                print('yesDef')
+                print(b)
+            else:
+                g = DPCArea(DPCArea=dbframe.DPCDefArea)
+                print('NoSec')
+                
+                g.save()
+                b = g
+                print(b)
+            if DPCSec.objects.filter(DPCSec=dbframe.DPCSecArea).exists():
+                w = DPCSec.objects.filter(DPCSec=dbframe.DPCSecArea).first()
+                print('yesSec')
+                print(w)
+            else:
+                g = DPCSec(DPCSec=dbframe.DPCSecArea)
+                g.save()
+                w = g
+                print('noSec')
+                print(type(b))
             d = Status.objects.filter(Status=dbframe.DPCStatus).first()
-            obj =  DPCRemark(DPCName=a,Date=str(timezone.now()),POHDate=e, DPCDefArea=b, DPCSecArea=c , DPCStatus=d, DPCDef=dbframe.DPCDef)           
+            obj =  DPCRemark(DPCName=a,Date=str(timezone.now()),POHDate=e, DPCDefArea=b, DPCSecArea=w , DPCStatus=d, DPCDef=dbframe.DPCDef)           
             obj.save()
         p = DPC.objects.get(id=Serial)
         q = DPCRemark.objects.filter(DPCName=p.id).order_by('-Date')
@@ -62,7 +81,139 @@ def Import_Excel_pandas(request, Serial):
             'freq': list1 ,
             }
         return render(request, 'deficiencies/dpcdefdet.html',context)   
+
+
+def MCExcelImport(request, Serial):
     
+    if request.method == 'POST' and request.FILES['myfile']:      
+        myfile = request.FILES['myfile']
+        pre = os.path.dirname(os.path.realpath(__file__))
+        fs = FileSystemStorage(location=pre)
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        path = os.path.join(pre, filename)     
+        empexceldata = pd.read_excel(path)        
+        dbframe = empexceldata
+        for dbframe in dbframe.itertuples():
+            print("---------")
+            print(dbframe)
+            a = MC.objects.filter(MCName=dbframe.MCName).first()
+            e = a.POHDate
+            if MCArea.objects.filter(MCArea=dbframe.MCDefArea).exists():
+                b = MCArea.objects.filter(MCArea=dbframe.MCDefArea).first()
+                print('yesDef')
+                print(b)
+            else:
+                g = MCArea(MCArea=dbframe.MCDefArea)
+                print('NoSec')
+                
+                g.save()
+                b = g
+                print(b)
+            if MCSec.objects.filter(MCSec=dbframe.MCSecArea).exists():
+                w = MCSec.objects.filter(MCSec=dbframe.MCSecArea).first()
+                print('yesSec')
+                print(w)
+            else:
+                g = MCSec(MCSec=dbframe.MCSecArea)
+                g.save()
+                w = g
+                print('noSec')
+                print(type(b))
+            d = Status.objects.filter(Status=dbframe.MCStatus).first()
+            obj =  MCRemark(MCName=a,Date=str(timezone.now()),POHDate=e, MCDefArea=b, MCSecArea=w , MCStatus=d, MCDef=dbframe.MCDef)           
+            obj.save()
+        p = MC.objects.get(id=Serial)
+        q = MCRemark.objects.filter(MCName=p.id).order_by('-Date')
+        print(q)
+        defi = []
+        qs2 = MCArea.objects.all()
+        list1 = []
+        for x in qs2:
+            u = MCRemark.objects.all().filter(POHDate=p.POHDate).filter(MCDefArea=x.id).count()
+            if u == 0:
+                pass
+            else:
+                print(u)
+                list1.append(str(u))
+                defi.append(str(x.MCArea))
+            print('appended list')
+            print(list1)
+        context = {
+            #'messages': message,
+            'object': p,
+            'q' : q,
+            'DPC': defi,
+            'freq': list1 ,
+            }
+        return render(request, 'deficiencies/mcdefdet.html',context)   
+
+def TCExcelImport(request, Serial):
+    
+    if request.method == 'POST' and request.FILES['myfile']:      
+        myfile = request.FILES['myfile']
+        pre = os.path.dirname(os.path.realpath(__file__))
+        fs = FileSystemStorage(location=pre)
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        path = os.path.join(pre, filename)     
+        empexceldata = pd.read_excel(path)        
+        dbframe = empexceldata
+        for dbframe in dbframe.itertuples():
+            print("---------")
+            print(dbframe)
+            a = TC.objects.filter(TCName=dbframe.TCName).first()
+            e = a.POHDate
+            if TCArea.objects.filter(TCCArea=dbframe.TCDefArea).exists():
+                b = TCArea.objects.filter(TCCArea=dbframe.TCDefArea).first()
+                print('yesDef')
+                print(b)
+            else:
+                g = TCArea(TCCArea=dbframe.TCDefArea)
+                print('NoSec')
+                
+                g.save()
+                b = g
+                print(b)
+            if TCSec.objects.filter(TCSec=dbframe.TCSecArea).exists():
+                w = TCSec.objects.filter(TCSec=dbframe.TCSecArea).first()
+                print('yesSec')
+                print(w)
+            else:
+                g = TCSec(TCSec=dbframe.TCSecArea)
+                g.save()
+                w = g
+                print('noSec')
+                print(type(b))
+            d = Status.objects.filter(Status=dbframe.TCStatus).first()
+            obj =  TCRemark(TCName=a,Date=str(timezone.now()),POHDate=e, TCDefArea=b, TCSecArea=w , TCStatus=d, TCDef=dbframe.TCDef)           
+            obj.save()
+        p = TC.objects.get(id=Serial)
+        q = TCRemark.objects.filter(TCName=p.id).order_by('-Date')
+        print(q)
+        defi = []
+        qs2 = TCArea.objects.all()
+        list1 = []
+        for x in qs2:
+            u = TCRemark.objects.all().filter(POHDate=p.POHDate).filter(TCDefArea=x.id).count()
+            if u == 0:
+                pass
+            else:
+                print(u)
+                list1.append(str(u))
+                defi.append(str(x.TCCArea))
+            print('appended list')
+            print(list1)
+        context = {
+            #'messages': message,
+            'object': p,
+            'q' : q,
+            'DPC': defi,
+            'freq': list1 ,
+            }
+        return render(request, 'deficiencies/tcdefdet.html',context)   
+
+  
 
 class DefiHome(LoginRequiredMixin, TemplateView):
     template_name = 'deficiencies/defhome.html'
@@ -1043,7 +1194,7 @@ def TCChartByArea(request, Serial):
             pass
         else:
             list11.append(str(u))
-            defi1.append(str(x.TCArea))
+            defi1.append(str(x.TCCArea))
         print('appended list m')
     print(list11)
     print(defi1)
@@ -1056,29 +1207,3 @@ def TCChartByArea(request, Serial):
     }
     return render(request, 'deficiencies/tcdefdet.html', context)
 
-@login_required
-def DPCExcelImport(request, Serial):
-    p = DPC.objects.get(id=Serial)
-    q = DPCRemark.objects.filter(DPCName=p.id).order_by('-Date')
-    print(q)
-    defi1 = []
-    qs2 = DPCArea.objects.all()
-    list11 = []
-    for x in qs2:
-        u = DPCRemark.objects.all().filter(POHDate=p.POHDate).filter(DPCDefArea=x.id).count()
-        if u == 0:
-            pass
-        else:
-            list11.append(str(u))
-            defi1.append(str(x.DPCArea))
-        print('appended list m')
-    print(list11)
-    print(defi1)
-    context = {
-        #'messages': message,
-        'object': p,
-        'q' : q,
-        'DPC': defi1,
-        'freq': list11 ,
-    }
-    return render(request, 'deficiencies/dpcdefdet.html', context)

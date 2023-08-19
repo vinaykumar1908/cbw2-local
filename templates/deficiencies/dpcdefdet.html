@@ -66,6 +66,8 @@
 
 <div class="row center">
     <div class="col center2">
+        {% if user.is_authenticated %}
+        {%if user.is_superuser == 1%}
         <form method="POST" action="{%url 'DPCExcelImport' object.pk %}" enctype="multipart/form-data">
             {% csrf_token %}
          
@@ -78,6 +80,8 @@
                                     
                         </div>
           </form> 
+          {%endif%}
+          {%endif%}
 <form method="POST" action="{%url 'addDPCremark' object.pk %}" >
     {% csrf_token %}
     <h3 style="color:black; font-family:sans-serif; font-style:italic"> Add New Deficiency</h3>

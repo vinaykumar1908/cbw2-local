@@ -34,6 +34,8 @@ urlpatterns = [
     path('TCChartByArea/<int:Serial>', views.TCChartByArea, name='TCChartByArea'),
     path('MCChartBySection/<int:Serial>', views.MCChartBySection, name='MCChartBySection'),
     path('MCChartByArea/<int:Serial>', views.MCChartByArea, name='MCChartByArea'),
-    path('DPCExcelImport/<int:Serial>/', views.Import_Excel_pandas, name='DPCExcelImport'),
+    path('DPCExcelImport/<int:Serial>/', views.DPCExcelImport, name='DPCExcelImport'),
+    path('MCExcelImport/<int:Serial>/', views.MCExcelImport, name='MCExcelImport'),
+    path('TCExcelImport/<int:Serial>/', views.TCExcelImport, name='TCExcelImport'),
     #path('CC/', views.CCHomePageView, name='CC_home'),
 ]

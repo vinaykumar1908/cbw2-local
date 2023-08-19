@@ -10,8 +10,78 @@
 <div class="center">
 <h1>Deficiencies Report of {{ object.TCName }}. POH Date {{ object.POHDate}}.  TC-ID: {{object.id}}</h1>
 </div>
+<div class="center">
+    <form method="POST" action="{%url 'TCChartBySection' object.pk%}" >
+        {% csrf_token %}
+        <input type="submit" value="Sort By Section" class="btn btn-primary custom-btn" >
+      </form>
+      <form method="POST" action="{%url 'TCChartByArea' object.pk%}" >
+        {% csrf_token %}
+        <input type="submit" value="Sort By Category" class="btn btn-primary custom-btn" >
+      </form>
+    </div>
+</div>
+    
+<canvas  id="myChart" width="40" height="16"></canvas>
+</div>
+<script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{%for x in DPC%} '{{x}}', {%endfor%}],
+            datasets: [{
+                label: 'No of Cases',
+                data: [{%for x in freq %} {{x}}, {% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
 <div class="row center">
     <div class="col center2">
+
+        {% if user.is_authenticated %}
+        {%if user.is_superuser == 1%}
+        <form method="POST" action="{%url 'TCExcelImport' object.pk %}" enctype="multipart/form-data">
+            {% csrf_token %}
+         
+            <div
+             class="row center">
+                
+                            <input type="file" name="myfile" class="form-control">
+                                     <button type="submit" class="btn btn-success" >Upload data</button> 
+                                        
+                                    
+                        </div>
+          </form> 
+          {%endif%}
+          {%endif%}
+
         <form method="POST" action="{%url 'addTCremark' object.pk %}">
             {% csrf_token %}
             <h3 style="color:black; font-family:sans-serif; font-style:italic"> Add New Deficiency</h3>
