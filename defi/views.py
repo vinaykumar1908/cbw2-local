@@ -18,6 +18,7 @@ from datetime import date, datetime, timedelta
 
 def Import_Excel_pandas(request, Serial):
     print("---------")
+    print(Serial)
     if request.method == 'POST' and request.FILES['myfile']:      
         myfile = request.FILES['myfile']
         pre = os.path.dirname(os.path.realpath(__file__))
@@ -37,34 +38,31 @@ def Import_Excel_pandas(request, Serial):
             d = Status.objects.filter(Status=dbframe.DPCStatus).first()
             obj =  DPCRemark(DPCName=a,Date=str(timezone.now()),POHDate=e, DPCDefArea=b, DPCSecArea=c , DPCStatus=d, DPCDef=dbframe.DPCDef)           
             obj.save()
-    p = DPC.objects.get(id=Serial)
-    q = DPCRemark.objects.filter(DPCName=p.id).order_by('-Date')
-    print(q)
-    defi = []
-    qs2 = DPCArea.objects.all()
-    list1 = []
-    for x in qs2:
-        u = DPCRemark.objects.all().filter(POHDate=p.POHDate).filter(DPCDefArea=x.id).count()
-        if u == 0:
-            pass
-        else:
-            print(u)
-            list1.append(str(u))
-            defi.append(str(x.DPCArea))
-        print('appended list')
-        print(list1)
-    context = {
-        #'messages': message,
-        'object': p,
-        'q' : q,
-        'DPC': defi,
-        'freq': list1 ,
-        }
-    return render(request, 'deficiencies/dpcdefdet.html', {
-            'uploaded_file_url': uploaded_file_url
-            })   
+        p = DPC.objects.get(id=Serial)
+        q = DPCRemark.objects.filter(DPCName=p.id).order_by('-Date')
+        print(q)
+        defi = []
+        qs2 = DPCArea.objects.all()
+        list1 = []
+        for x in qs2:
+            u = DPCRemark.objects.all().filter(POHDate=p.POHDate).filter(DPCDefArea=x.id).count()
+            if u == 0:
+                pass
+            else:
+                print(u)
+                list1.append(str(u))
+                defi.append(str(x.DPCArea))
+            print('appended list')
+            print(list1)
+        context = {
+            #'messages': message,
+            'object': p,
+            'q' : q,
+            'DPC': defi,
+            'freq': list1 ,
+            }
+        return render(request, 'deficiencies/dpcdefdet.html',context)   
     
-    return render(request, 'deficiencies/dpcdefdet.html',context)
 
 class DefiHome(LoginRequiredMixin, TemplateView):
     template_name = 'deficiencies/defhome.html'

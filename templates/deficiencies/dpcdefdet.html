@@ -11,15 +11,15 @@
     <h1>Deficiencies Report of {{ object.DPCName }}. POH Date {{ object.POHDate}} . DPC-ID: {{object.id}}</h1>
     </div>
 <div class="center">
-    <form method="POST" action="{%url 'DPCChartBySection' object.pk %}" >
+    <form method="POST" action="{%url 'DPCChartBySection' object.id %}" >
         {% csrf_token %}
         <input type="submit" value="Sort By Section" class="btn btn-primary custom-btn" >
       </form>
-      <form method="POST" action="{%url 'DPCChartByArea' object.pk%}" >
+      <form method="POST" action="{%url 'DPCChartByArea' object.id%}" >
         {% csrf_token %}
         <input type="submit" value="Sort By Category" class="btn btn-primary custom-btn" >
       </form>
-    </div>
+    
 </div>
     
 <canvas  id="myChart" width="40" height="16"></canvas>

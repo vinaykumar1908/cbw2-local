@@ -9,25 +9,14 @@ from import_export.widgets import ForeignKeyWidget
 # Register your models here
 
 
-class DPCRemarkResource(resources.ModelResource):
-    DPCName_id = Field(
-        column_name='DPCName_id',
-        attribute='DPCName_id',
-        widget=ForeignKeyWidget(DPC, 'DPCName'))
 
-    class Meta:
-        model = DPCRemark
-
-class DPCRemarkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = (['DPCName'])
-    resources_class = DPCRemarkResource
 
 admin.site.register(DPC)
 admin.site.register(TC)
 admin.site.register(MC)
 admin.site.register(DPCArea)
 admin.site.register(DPCSec)
-admin.site.register(DPCRemark, DPCRemarkAdmin)
+admin.site.register(DPCRemark)
 admin.site.register(TCArea)
 admin.site.register(TCSec)
 admin.site.register(TCRemark)
