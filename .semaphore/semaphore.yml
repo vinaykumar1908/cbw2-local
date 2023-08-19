@@ -1,0 +1,39 @@
+version: v1.0
+name: Initial Pipeline
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu2004
+blocks:
+  - name: Pip3
+    task:
+      jobs:
+        - name: 'Job #1'
+          commands:
+            - sem-version python 3.9
+            - checkout
+            - mkdir .pip_cache
+            - cache restore
+            - pip3 install --cache-dir .pip_cache -r requirements.txt
+            - cache store
+  - name: 'Block #2'
+    task:
+      prologue:
+        commands:
+          - sem-version python 3.9
+          - checkout
+          - cache restore
+          - pip3 install --cache-dir .pip_cache -r requirements.txt
+      jobs:
+        - name: 'Job #1'
+          commands:
+            - python3 manage.py makemigrations
+            - python3 manage.py migrate
+        - name: 'Job #2'
+          commands:
+            - python3 manage.py check --deploy
+promotions:
+  - name: Promotion 1
+    pipeline_file: pipeline_2.yml
+    auto_promote:
+      when: branch = 'master' AND result = 'passed'

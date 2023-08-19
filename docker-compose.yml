@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+ nginx:
+   build: ./nginx
+   ports:
+     - 1300:80
+   volumes:
+     - static_volume:/home/app/microservice/static
+    depends_on:
+      - web
+    restart: "on-failure"
+  web:
+    build: . #build the image for the web service from the dockerfile in parent directory
+    command: sh -c "sudo python manage.py makemigrations &&
+                    sudo python manage.py migrate &&
+                    sudo python manage.py initiate_admin &&
+                    sudo python manage.py collectstatic &&
+                    sudo gunicorn cbw.wsgi:application --bind 0.0.0.0:95"
+    volumes:
+      - .:/microservice:rw # map data and files from parent directory in host to microservice directory in docker containe
+      - static_volume:/home/app/microservice/static
+    env_file:
+      - .env
+    image: vinaykumar1908/cbw2
+
+    expose:
+      - 95
+    restart: "on-failure"
+    depends_on:
+      - db
+  db:
+    image: postgres:11-alpine
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD="password"
+      - POSTGRES_DB="admin"
+      - PGPORT=${DB_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+    restart: "on-failure"
+
+
+volumes:
+  postgres_data:
+  static_volume:

@@ -1,0 +1,149 @@
+{%extends 'charts/base.html'%}
+
+
+{%block title%}
+{{ object.DPCName }} POH Date {{ object.POHDate}}
+{%endblock title%}
+
+
+{%block content%}
+<div class="center">
+    <h1>Deficiencies Report of {{ object.DPCName }}. POH Date {{ object.POHDate}} . DPC-ID: {{object.id}}</h1>
+    </div>
+<div class="center">
+    <form method="POST" action="{%url 'DPCChartBySection' object.pk %}" >
+        {% csrf_token %}
+        <input type="submit" value="Sort By Section" class="btn btn-primary custom-btn" >
+      </form>
+      <form method="POST" action="{%url 'DPCChartByArea' object.pk%}" >
+        {% csrf_token %}
+        <input type="submit" value="Sort By Category" class="btn btn-primary custom-btn" >
+      </form>
+    </div>
+</div>
+    
+<canvas  id="myChart" width="40" height="16"></canvas>
+</div>
+<script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{%for x in DPC%} '{{x}}', {%endfor%}],
+            datasets: [{
+                label: 'No of Cases',
+                data: [{%for x in freq %} {{x}}, {% endfor %}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+
+<div class="row center">
+    <div class="col center2">
+        <form method="POST" action="{%url 'DPCExcelImport' object.pk %}" enctype="multipart/form-data">
+            {% csrf_token %}
+         
+            <div
+             class="row center">
+                
+                            <input type="file" name="myfile" class="form-control">
+                                     <button type="submit" class="btn btn-success" >Upload data</button> 
+                                        
+                                    
+                        </div>
+          </form> 
+<form method="POST" action="{%url 'addDPCremark' object.pk %}" >
+    {% csrf_token %}
+    <h3 style="color:black; font-family:sans-serif; font-style:italic"> Add New Deficiency</h3>
+    <h5>Use the Autofill to fetch the part and the deficiency from the database</h5>
+    <input type="text" id="Part" name="Part" style="background-color: white; color:black" placeholder="Category" aria-label="Category"/>
+    <script>
+        $("#Part").autocomplete({
+            source: '{%url 'partAutocomplete'%}',
+            menudocking: { menucorner: "right top", inputcorner: "right bottom", collision: "none" },
+                    });
+    </script>
+    <input type="text" id="Def" name="Def" style="background-color: white; color:black" placeholder="Section" aria-label="Section"/>
+    <script>
+        $("#Def").autocomplete({
+            source: '{%url 'defAutocomplete'%}'
+                        });
+    </script>
+
+    <br>
+    <input type="text" id="Details" name="Details" style="background-color: white; color:black" placeholder="Details" aria-label="Details"/>
+    <input type="text" id="Status" name="Status" style="background-color: white; color:black" placeholder="Status" aria-label="Status"/>
+    <script>
+        $("#Status").autocomplete({
+            source: '{%url 'StatusAutocomplete'%}'
+                        });
+    </script>
+    <br>
+    <input type="submit" value="save" style="background-color: lightcoral; color:black" />
+     
+
+<div class="center">
+
+    <div style="flex-grow: 8; background-color:DodgerBlue;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Category</th>
+                    <th>Section</th>
+                    
+                    <th>Details</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                {%for obj in q %}
+                <tr class='danger'>
+                    <td class='text-primary'>{{forloop.counter}}</td>
+                    <td class='text-primary'>{{obj.DPCDefArea}}</td>
+                    <td class='text-primary'>{{obj.DPCSecArea}}</td>
+                    <td class='text-primary'>{{obj.DPCDef}}</td>
+                    <td class='text-primary'>{{obj.DPCStatus}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+    
+        </table>
+    </div>
+
+</div>
+
+
+
+{%endblock content%} 
+{% block afterbody %}
+
+
+{% endblock afterbody %}

@@ -1,0 +1,26 @@
+version: v1.0
+name: Pipeline 2
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu2004
+blocks:
+  - name: 'Block #1'
+    task:
+      jobs:
+        - name: 'Job #1'
+          commands:
+            - 'docker pull vinaykumar1908/cbw2:latest || true'
+            - 'docker build -t vinaykumar1908/cbw2:latest .'
+            - docker login -u vinaykumar1908 -p Rfymas1908
+            - 'docker push vinaykumar1908/cbw2:latest'
+      prologue:
+        commands:
+          - sem-version python 3.9
+          - checkout
+          - cache restore
+          - mkdir -p .pip_cache
+          - pip3 install --cache-dir .pip_cache -r requirements.txt
+          - 'python manage.py makemigrations '
+          - python manage.py migrate
+          - cd .

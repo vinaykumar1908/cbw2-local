@@ -1,0 +1,249 @@
+{%extends 'charts/base.html'%}
+
+
+{%block title%}
+CBW - Deficiencies Report List
+{%endblock title%}
+
+
+{%block content%}
+
+<h1>Deficiencies Report List</h1>
+
+<div class="center">
+<div class="row" >
+  <div class="col">
+    <h1>DPC</h1>
+<div class="center2">
+
+<form method="POST" action="{%url 'addDPC'%}">
+  {% csrf_token %}
+  <h3>Enter DPC Number</h3>
+  <input type="text" ,class="form-control form-group " , id="DPCNum" name="DPCNum"
+    style="background-color: white; color:black" placeholder="Enter DPC Number" aria-label="Enter DPC Number">
+    <input type="text" name="datepicker1" style="background-color: white; color:black" placeholder="Date" aria-label="Date"
+      id="datepicker1">
+      <br>
+      <input type="text" ,class="form-control form-group " , id="DPCShop" name="DPCShop"
+        style="background-color: white; color:black" placeholder="Enter DPC Shop" aria-label="Enter DPC Shop">
+        <input type="text" ,class="form-control form-group " , id="DPCShed" name="DPCShed"
+        style="background-color: white; color:black" placeholder="Enter DPC Shed" aria-label="Enter DPC Shed">
+    <script>
+      $(function () {
+        $("#datepicker1").datepicker({
+          dateFormat: "yy-mm-dd"
+        });
+      });
+    </script>
+    <script>
+      $("#DPCShop").autocomplete({
+          source: '{%url 'ShopAutocomplete'%}',
+          menudocking: { menucorner: "right top", inputcorner: "right bottom", collision: "none" },
+                  });
+  </script>
+  <script>
+    $("#DPCShed").autocomplete({
+        source: '{%url 'ShedAutocomplete'%}',
+        menudocking: { menucorner: "right top", inputcorner: "right bottom", collision: "none" },
+                });
+</script>
+    <br>
+    <input type="submit" value="save" style="background-color: lightcoral; color:black" />
+</form>
+
+
+</div>
+<div class="center2 table-wrapper-scroll-y my-custom-scrollbar">
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>POH Date</th>
+        <th>DPC Number</th>
+        <th>Shop</th>
+        <th>Shed</th>
+        <th>Count</th>
+        </tr>
+        </thead>
+{%for object , l in dpc%}
+
+<tbody>
+  <tr class='danger'>
+    <td class='text-primary'>{{forloop.counter}}</td>
+
+    <td class='text-primary'>{{object.POHDate}}</td>
+    <td class='text-primary'><a href="{%url 'showDPCdet' object.pk %}" >{{object.DPCName}}</a></td> 
+    <td class='text-primary'>{{object.Shop}}</td>
+    <td class='text-primary'>{{object.Shed}}</td>
+    <td class='text-primary'>{{l}}</td>
+    </tr>
+    </tbody>
+
+{%endfor%}
+</table>
+
+
+
+</div>
+
+  </div>
+  <div class="col">
+    <h1>TC</h1>
+    <div class="center2">
+  
+    <form method="POST" action="{%url 'addTC'%}">
+      {% csrf_token %}
+      <h3>Enter TC Number</h3>
+      <input type="text" ,class="form-control form-group " , id="TCNum" name="TCNum"
+        style="background-color: white; color:black" placeholder="Enter TC Number" aria-label="Enter TC Number">
+      <input type="text" name="datepicker" style="background-color: white; color:black" placeholder="Date" aria-label="Date"
+        id="datepicker"><br>
+        <input type="text" ,class="form-control form-group " , id="TCShop" name="TCShop"
+          style="background-color: white; color:black" placeholder="Enter TC Shop" aria-label="Enter TC Shop">
+          <input type="text" ,class="form-control form-group " , id="TCShed" name="TCShed"
+          style="background-color: white; color:black" placeholder="Enter TC Shed" aria-label="Enter TC Shed">
+      
+      <script>
+        $(function () {
+          $("#datepicker").datepicker({
+            dateFormat: "yy-mm-dd"
+          });
+        });
+      </script>
+      <script>
+        $("#TCShop").autocomplete({
+            source: '{%url 'ShopAutocomplete'%}',
+            menudocking: { menucorner: "right top", inputcorner: "right bottom", collision: "none" },
+                    });
+    </script>
+    <script>
+      $("#TCShed").autocomplete({
+          source: '{%url 'ShedAutocomplete'%}',
+          menudocking: { menucorner: "right top", inputcorner: "right bottom", collision: "none" },
+                  });
+  </script>
+      <br>
+        <input type="submit" value="save" style="background-color: lightcoral; color:black" />
+    </form>
+  
+  
+  
+  </div>
+<div class="center2 table-wrapper-scroll-y my-custom-scrollbar">
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>POH Date</th>
+        <th>TC Number</th>
+        <th>Shop</th>
+        <th>Shed</th>
+        <th>Count</th>
+      </tr>
+    </thead>
+    {%for object , l in tc%}
+    <tbody>
+      <tr class='danger'>
+        <td class='text-primary'>{{forloop.counter}}</td>
+        <td class='text-primary'>{{object.POHDate}}</td>
+        <td class='text-primary'><a href="{%url 'showTCdet' object.pk %}">{{object.TCName}}</a></td>
+        <td class='text-primary'>{{object.Shop}}</td>
+    <td class='text-primary'>{{object.Shed}}</td>
+    <td class='text-primary'>{{l}}</td>
+      </tr>
+    </tbody>
+    {%endfor%}
+  </table>
+
+
+
+</div></div>
+  <div class="col">
+    <h1>MC</h1>
+    <div class="center2">
+    
+      <form method="POST" action="{%url 'addMC'%}">
+        {% csrf_token %}
+        <h3>Enter MC Number</h3>
+        <input type="text" ,class="form-control form-group " , id="MCNum" name="MCNum"
+          style="background-color: white; color:black" placeholder="Enter MC Number" aria-label="Enter MC Number">
+        <input type="text" name="datepicker2" style="background-color: white; color:black" placeholder="Date" aria-label="Date"
+          id="datepicker2">
+<br>
+          <input type="text" ,class="form-control form-group " , id="MCShop" name="MCShop"
+          style="background-color: white; color:black" placeholder="Enter MC Shop" aria-label="Enter MC Shop">
+          <input type="text" ,class="form-control form-group " , id="MCShed" name="MCShed"
+          style="background-color: white; color:black" placeholder="Enter MC Shed" aria-label="Enter MC Shed">
+        
+        <script>
+          $(function () {
+            $("#datepicker2").datepicker({
+              dateFormat: "yy-mm-dd"
+            });
+          });
+        </script>
+        <script>
+          $("#MCShop").autocomplete({
+              source: '{%url 'ShopAutocomplete'%}',
+              menudocking: { menucorner: "right top", inputcorner: "right bottom", collision: "none" },
+                      });
+      </script>
+      <script>
+        $("#MCShed").autocomplete({
+            source: '{%url 'ShedAutocomplete'%}',
+            menudocking: { menucorner: "right top", inputcorner: "right bottom", collision: "none" },
+                    });
+    </script>
+        <br>
+          <input type="submit" value="save" style="background-color: lightcoral; color:black" />
+      </form>
+    
+    
+    
+    </div>
+    <div class="center2 table-wrapper-scroll-y my-custom-scrollbar">
+    
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>POH Date</th>
+            <th>MC Number</th>
+            <th>Shop</th>
+        <th>Shed</th>
+        <th>Count</th>
+          </tr>
+        </thead>
+        {%for object , l in mc%}
+        <tbody>
+          <tr class='danger'>
+            <td class='text-primary'>{{forloop.counter}}</td>
+            <td class='text-primary'>{{object.POHDate}}</td>
+            <td class='text-primary'><a href="{%url 'showMCdet' object.pk %}">{{object.MCName}}</a></td>
+            <td class='text-primary'>{{object.Shop}}</td>
+    <td class='text-primary'>{{object.Shed}}</td>
+    <td class='text-primary'>{{l}}</td>
+          </tr>
+        </tbody>
+        {%endfor%}
+      </table>
+
+    
+    
+    
+    </div>
+  </div>
+  
+</div>
+</div>
+
+    {%endblock content%} {% block afterbody %} 
+    <script>
+      $("#moduleName").autocomplete({
+        source: ''
+    });
+    </script>
+
+    {% endblock afterbody %}
