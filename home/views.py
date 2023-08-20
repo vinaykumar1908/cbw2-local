@@ -27,7 +27,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 
 from django.db.models import Avg, Sum
-from defi.models import DPC, TC, MC, DPCArea, DPCRemark, MCArea, MCRemark, TCArea, TCRemark
+from defi.models import DPC, TC, MC, DPCArea, DPCRemark, MCArea, MCRemark, TCArea, TCRemark, Status
 
 
 @login_required
@@ -41,6 +41,26 @@ def homeView(request):
     qs7 = DPCArea.objects.all().count()
     qs8 = TCArea.objects.all().count()
     qs9 = MCArea.objects.all().count()
+    mk = Status.objects.get(Status='Attended')
+    print(mk)
+    qs10 = DPCRemark.objects.all().filter(DPCStatus=mk.id).count()
+    qs11 = TCRemark.objects.all().filter(TCStatus=mk.id).count()
+    qs12 = MCRemark.objects.all().filter(MCStatus=mk.id).count()
+    mk2 = Status.objects.get(Status='Not Attended')
+    print(mk2)
+    qs13 = DPCRemark.objects.all().filter(DPCStatus=mk2.id).count()
+    qs14 = TCRemark.objects.all().filter(TCStatus=mk2.id).count()
+    qs15 = MCRemark.objects.all().filter(MCStatus=mk2.id).count()
+    mk3 = Status.objects.get(Status='Material Not Available')
+    print(mk3)
+    qs16 = DPCRemark.objects.all().filter(DPCStatus=mk3.id).count()
+    qs17 = TCRemark.objects.all().filter(TCStatus=mk3.id).count()
+    qs18 = MCRemark.objects.all().filter(MCStatus=mk3.id).count()
+    mk4 = Status.objects.get(Status='Temporarily Attended')
+    print(mk4)
+    qs19 = DPCRemark.objects.all().filter(DPCStatus=mk4.id).count()
+    qs20 = TCRemark.objects.all().filter(TCStatus=mk4.id).count()
+    qs21 = MCRemark.objects.all().filter(MCStatus=mk4.id).count()
         
 
     #qs1 = RM.Rake.objects.all()
@@ -50,7 +70,6 @@ def homeView(request):
     yesterday = date.today() - timedelta(days=1)
 
     #qs2 = CCDetails.objects.filter(Date__gt=today, Date__lt=timezone.now())
-    print(qs)
     #qs3 = STRDetails.objects.filter(Date__gt=today, Date__lt=timezone.now())
     #qs4 = CCDetails.objects.filter(Date__gt=yesterday, Date__lt=today)
     #qs5 = STRDetails.objects.filter(Date__gt=yesterday, Date__lt=today)
@@ -76,6 +95,18 @@ def homeView(request):
         'i' : qs7,
         'j' : qs8,
         'k' : qs9,
+        'l' : qs10,
+        'm' : qs11,
+        'n' : qs12,
+        'o' : qs13,
+        'p' : qs14,
+        'q' : qs15,
+        'r' : qs16,
+        's' : qs17,
+        't' : qs18,
+        'u' : qs19,
+        'v' : qs20,
+        'w' : qs21,
         
         'time' : timerightnow,
         
