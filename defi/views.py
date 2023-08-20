@@ -16,6 +16,13 @@ from django.utils import timezone
 from django.core.files.storage import FileSystemStorage
 from datetime import date, datetime, timedelta
 
+import datetime as dt
+import os
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+ 
+import csv
+
 def DPCExcelImport(request, Serial):
     print("---------")
     print(Serial)
@@ -81,7 +88,6 @@ def DPCExcelImport(request, Serial):
             'freq': list1 ,
             }
         return render(request, 'deficiencies/dpcdefdet.html',context)   
-
 
 def MCExcelImport(request, Serial):
     
@@ -195,7 +201,7 @@ def TCExcelImport(request, Serial):
         qs2 = TCArea.objects.all()
         list1 = []
         for x in qs2:
-            u = TCRemark.objects.all().filter(POHDate=p.POHDate).filter(TCDefArea=x.id).count()
+            u = TCRemark.objects.all().filter(POHDate=p.POHDate).filter(TCDefArea=x.id).filter(TCName=p.id).count()
             if u == 0:
                 pass
             else:
@@ -212,6 +218,33 @@ def TCExcelImport(request, Serial):
             'freq': list1 ,
             }
         return render(request, 'deficiencies/tcdefdet.html',context)   
+
+
+
+
+  
+def export_dpc_remark(request, Serial): 
+    if request.method == 'POST':
+        a = DPC.objects.filter(id=Serial).first()
+        p = a.POHDate
+        print(p)
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=f"{p}.csv"'        
+        writer = csv.writer(response)
+        writer.writerow([' {} Details'.format(a.DPCName)])       
+        writer.writerow(['S.No','Date','DPCName','POHDate','Category','Section','Details','Status'])
+ 
+        users = DPCRemark.objects.all().filter(DPCName=a.id).values_list('id','Date','DPCName_id','POHDate','DPCDefArea','DPCSecArea','DPCDef','DPCStatus')
+        print(users)
+        for user in users:
+            writer.writerow(user)
+        return response
+ 
+    return render(request, 'deficiencies/dpcdefdet.html')
+
+
+
+
 
   
 
@@ -492,66 +525,6 @@ def showMCdet(request, Serial):
 
 
 @login_required
-def addDPCpart(request, Serial):
-    q = DPC.objects.get(id=Serial)
-    if DPCArea.objects.filter(DPCArea=request.POST.get('addDPCpart')).exists():
-        message = messages.warning(request, "DPC Part already exists ")
-        p = DPCRemark.objects.filter(DPCName=q.id).order_by('-Date')
-        context = {
-        #'messages': message,
-        'object': q,
-        'q' : p,
-        'message' : message,
-            }
-        return render(request, 'deficiencies/dpcdefdet.html', context)
-        pass
-    if request.method == 'POST':
-        newPart = DPCArea(DPCArea=request.POST.get('addDPCpart'))
-        newPart.save()
-        print(newPart)
-        message = messages.success(request, "DPC Part '{}' Added ".format(newPart))
-    else:
-        message = messages.warning(request, "DPC Part Not Added ")
-    p = DPCRemark.objects.filter(DPCName=q.id).order_by('-Date')
-    context = {
-        #'messages': message,
-        'object': q,
-        'q' : p,
-        'message' : message,
-    }
-    return render(request, 'deficiencies/dpcdefdet.html', context)
-
-@login_required
-def addDPCdef(request, Serial):
-    q = DPC.objects.get(id=Serial)
-    if DPCDef.objects.filter(DPCDef=request.POST.get('addDPCdef')).exists():
-        message = messages.warning(request, "DPC Deficiency already exists ")
-        p = DPCRemark.objects.filter(DPCName=q.id).order_by('-Date')
-        context = {
-        #'messages': message,
-        'object': q,
-        'q' : p,
-        'message' : message,
-            }
-        return render(request, 'deficiencies/dpcdefdet.html', context)
-        pass
-    if request.method == 'POST':
-        newDef = DPCDef(DPCDef=request.POST.get('addDPCdef'))
-        newDef.save()
-        print(newDef)
-        message = messages.success(request, "DPC Deficiency '{}'  Added ".format(newDef))
-    else:
-        message = messages.warning(request, "DPC Deficiency Not Added ")
-    p = DPCRemark.objects.filter(DPCName=q.id).order_by('-Date')
-    context = {
-        #'messages': message,
-        'object': q,
-        'q' : p,
-    }
-    return render(request, 'deficiencies/dpcdefdet.html', context)
-
-
-@login_required
 def addDPCRemark(request, Serial):
     if request.POST.get('Part') and request.POST.get('Def') and request.POST.get('Details') and request.POST.get('Status'):
         q = DPC.objects.filter(id=Serial).first()
@@ -577,7 +550,7 @@ def addDPCRemark(request, Serial):
     qs2 = DPCArea.objects.all()
     list1 = []
     for x in qs2:
-        u = DPCRemark.objects.all().filter(POHDate=p.POHDate).filter(DPCDefArea=x.id).count()
+        u = DPCRemark.objects.all().filter(POHDate=p.POHDate).filter(DPCDefArea=x.id).filter(DPCName=p.id).count()
         if u == 0:
             pass
         else:
@@ -594,66 +567,6 @@ def addDPCRemark(request, Serial):
         'freq': list1 ,
     }
     return render(request, 'deficiencies/dpcdefdet.html', context)
-
-@login_required
-def addTCpart(request, Serial):
-    q = TC.objects.get(id=Serial)
-    if TCArea.objects.filter(TCCArea=request.POST.get('addTCpart')).exists():
-        message = messages.warning(request, "TC Part already exists ")
-        p = TCRemark.objects.filter(TCName=q.id).order_by('-Date')
-        context = {
-        #'messages': message,
-        'object': q,
-        'q' : p,
-        'message' : message,
-            }
-        return render(request, 'deficiencies/tcdefdet.html', context)
-        pass
-    if request.method == 'POST':
-        newPart = TCArea(TCCArea=request.POST.get('addTCpart'))
-        newPart.save()
-        print(newPart)
-        message = messages.success(request, "TC Part '{}' Added ".format(newPart))
-    else:
-        message = messages.warning(request, "TC Part Not Added ")
-    p = TCRemark.objects.filter(TCName=q.id).order_by('-Date')
-    context = {
-        #'messages': message,
-        'object': q,
-        'q' : p,
-        'message' : message,
-    }
-    return render(request, 'deficiencies/tcdefdet.html', context)
-
-@login_required
-def addTCdef(request, Serial):
-    q = TC.objects.get(id=Serial)
-    if TCDef.objects.filter(TCDef=request.POST.get('addTCdef')).exists():
-        message = messages.warning(request, "TC Deficiency already exists ")
-        p = TCRemark.objects.filter(TCName=q.id).order_by('-Date')
-        context = {
-        #'messages': message,
-        'object': q,
-        'q' : p,
-        'message' : message,
-            }
-        return render(request, 'deficiencies/tcdefdet.html', context)
-        pass
-    if request.method == 'POST':
-        newDef = TCDef(TCDef=request.POST.get('addTCdef'))
-        newDef.save()
-        print(newDef)
-        message = messages.success(request, "TC Deficiency '{}'  Added ".format(newDef))
-    else:
-        message = messages.warning(request, "TC Deficiency Not Added ")
-    p = TCRemark.objects.filter(TCName=q.id).order_by('-Date')
-    context = {
-        #'messages': message,
-        'object': q,
-        'q' : p,
-    }
-    return render(request, 'deficiencies/tcdefdet.html', context)
-
 
 @login_required
 def addTCRemark(request, Serial):
@@ -676,73 +589,27 @@ def addTCRemark(request, Serial):
     
     p = TC.objects.get(id=Serial)
     q = TCRemark.objects.filter(TCName=p.id).order_by('-Date')
-    print(q)
+    defi = []
+    qs2 = TCArea.objects.all()
+    list1 = []
+    for x in qs2:
+        u = TCRemark.objects.all().filter(POHDate=p.POHDate).filter(TCDefArea=x.id).filter(TCName=p.id).count()
+        if u == 0:
+            pass
+        else:
+            print(u)
+            list1.append(str(u))
+            defi.append(str(x.TCCArea))
+        print('appended list')
+        print(list1)
     context = {
         #'messages': message,
         'object': p,
         'q' : q,
+        'DPC': defi,
+        'freq': list1 ,
     }
     return render(request, 'deficiencies/tcdefdet.html', context)
-
-
-@login_required
-def addMCpart(request, Serial):
-    q = MC.objects.get(id=Serial)
-    if MCArea.objects.filter(MCArea=request.POST.get('addMCpart')).exists():
-        message = messages.warning(request, "MC Part already exists ")
-        p = MCRemark.objects.filter(MCName=q.id).order_by('-Date')
-        context = {
-        #'messages': message,
-        'object': q,
-        'q' : p,
-        'message' : message,
-            }
-        return render(request, 'deficiencies/mcdefdet.html', context)
-        pass
-    if request.method == 'POST':
-        newPart = MCArea(MCArea=request.POST.get('addMCpart'))
-        newPart.save()
-        print(newPart)
-        message = messages.success(request, "MC Part '{}' Added ".format(newPart))
-    else:
-        message = messages.warning(request, "MC Part Not Added ")
-    p = MCRemark.objects.filter(MCName=q.id).order_by('-Date')
-    context = {
-        #'messages': message,
-        'object': q,
-        'q' : p,
-        'message' : message,
-    }
-    return render(request, 'deficiencies/mcdefdet.html', context)
-
-@login_required
-def addMCdef(request, Serial):
-    q = MC.objects.get(id=Serial)
-    if MCDef.objects.filter(MCDef=request.POST.get('addMCdef')).exists():
-        message = messages.warning(request, "MC Deficiency already exists ")
-        p = MCRemark.objects.filter(MCName=q.id).order_by('-Date')
-        context = {
-        #'messages': message,
-        'object': q,
-        'q' : p,
-        'message' : message,
-            }
-        return render(request, 'deficiencies/mcdefdet.html', context)
-        pass
-    if request.method == 'POST':
-        newDef = MCDef(MCDef=request.POST.get('addMCdef'))
-        newDef.save()
-        print(newDef)
-        message = messages.success(request, "MC Deficiency '{}' Added ".format(newDef))
-    else:
-        message = messages.warning(request, "MC Deficiency Not Added ")
-    p = MCRemark.objects.filter(MCName=q.id).order_by('-Date')
-    context = {
-        #'messages': message,
-        'object': q,
-        'q' : p,
-    }
-    return render(request, 'deficiencies/mcdefdet.html', context)
 
 
 @login_required
@@ -766,11 +633,25 @@ def addMCRemark(request, Serial):
     
     p = MC.objects.get(id=Serial)
     q = MCRemark.objects.filter(MCName=p.id).order_by('-Date')
-    print(q)
+    defi = []
+    qs2 = MCArea.objects.all()
+    list1 = []
+    for x in qs2:
+        u = MCRemark.objects.all().filter(POHDate=p.POHDate).filter(MCDefArea=x.id).filter(MCName=p.id).count()
+        if u == 0:
+            pass
+        else:
+            print(u)
+            list1.append(str(u))
+            defi.append(str(x.MCArea))
+        print('appended list')
+        print(list1)
     context = {
         #'messages': message,
         'object': p,
         'q' : q,
+        'DPC': defi,
+        'freq': list1 ,
     }
     return render(request, 'deficiencies/mcdefdet.html', context)
 
@@ -1049,7 +930,7 @@ def DPCChartBySection(request, Serial):
     qs2 = DPCSec.objects.all()
     list11 = []
     for x in qs2:
-        u = DPCRemark.objects.all().filter(POHDate=p.POHDate).filter(DPCSecArea=x.id).count()
+        u = DPCRemark.objects.all().filter(POHDate=p.POHDate).filter(DPCSecArea=x.id).filter(DPCName=p.id).count()
         if u == 0:
             pass
         else:
@@ -1077,7 +958,7 @@ def DPCChartByArea(request, Serial):
     qs2 = DPCArea.objects.all()
     list11 = []
     for x in qs2:
-        u = DPCRemark.objects.all().filter(POHDate=p.POHDate).filter(DPCDefArea=x.id).count()
+        u = DPCRemark.objects.all().filter(POHDate=p.POHDate).filter(DPCDefArea=x.id).filter(DPCName=p.id).count()
         if u == 0:
             pass
         else:
@@ -1106,7 +987,7 @@ def MCChartBySection(request, Serial):
     qs2 = MCSec.objects.all()
     list11 = []
     for x in qs2:
-        u = MCRemark.objects.all().filter(POHDate=p.POHDate).filter(MCSecArea=x.id).count()
+        u = MCRemark.objects.all().filter(POHDate=p.POHDate).filter(MCSecArea=x.id).filter(MCName=p.id).count()
         if u == 0:
             pass
         else:
@@ -1134,7 +1015,7 @@ def MCChartByArea(request, Serial):
     qs2 = MCArea.objects.all()
     list11 = []
     for x in qs2:
-        u = MCRemark.objects.all().filter(POHDate=p.POHDate).filter(MCDefArea=x.id).count()
+        u = MCRemark.objects.all().filter(POHDate=p.POHDate).filter(MCDefArea=x.id).filter(MCName=p.id).count()
         if u == 0:
             pass
         else:
@@ -1161,7 +1042,7 @@ def TCChartBySection(request, Serial):
     qs2 = TCSec.objects.all()
     list11 = []
     for x in qs2:
-        u = TCRemark.objects.all().filter(POHDate=p.POHDate).filter(TCSecArea=x.id).count()
+        u = TCRemark.objects.all().filter(POHDate=p.POHDate).filter(TCSecArea=x.id).filter(TCName=p.id).count()
         if u == 0:
             pass
         else:
@@ -1189,7 +1070,7 @@ def TCChartByArea(request, Serial):
     qs2 = TCArea.objects.all()
     list11 = []
     for x in qs2:
-        u = TCRemark.objects.all().filter(POHDate=p.POHDate).filter(TCDefArea=x.id).count()
+        u = TCRemark.objects.all().filter(POHDate=p.POHDate).filter(TCDefArea=x.id).filter(TCName=p.id).count()
         if u == 0:
             pass
         else:

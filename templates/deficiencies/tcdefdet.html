@@ -10,18 +10,28 @@
 <div class="center">
 <h1>Deficiencies Report of {{ object.TCName }}. POH Date {{ object.POHDate}}.  TC-ID: {{object.id}}</h1>
 </div>
-<div class="center">
+<div class="overflow-auto w-100 h-10 center3">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th>
+                    
     <form method="POST" action="{%url 'TCChartBySection' object.pk%}" >
         {% csrf_token %}
-        <input type="submit" value="Sort By Section" class="btn btn-primary custom-btn" >
+        <input type="submit" value="Show Chart By Section" class="btn btn-primary custom-btn" >
       </form>
+    </th>
+    <th>
       <form method="POST" action="{%url 'TCChartByArea' object.pk%}" >
         {% csrf_token %}
-        <input type="submit" value="Sort By Category" class="btn btn-primary custom-btn" >
+        <input type="submit" value="Show Chart By Category" class="btn btn-primary custom-btn" >
       </form>
+    </th>
+</tr>
+  </thead>
+</table>
     </div>
-</div>
-    
+    {%if DPC%}
 <canvas  id="myChart" width="40" height="16"></canvas>
 </div>
 <script>
@@ -61,7 +71,7 @@
         }
     });
 </script>
-
+{%endif%}
 <div class="row center">
     <div class="col center2">
 

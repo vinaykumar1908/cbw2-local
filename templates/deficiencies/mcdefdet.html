@@ -11,18 +11,30 @@
 <h1>Deficiencies Report of {{ object.MCName }}. POH Date {{ object.Date}}.  MC-ID: {{object.id}}</h1>
 </div>
 
-<div class="center">
+<div class="overflow-auto w-100 h-10 center3">
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th>
+                    
     <form method="POST" action="{%url 'MCChartBySection' object.pk%}" >
         {% csrf_token %}
         <input type="submit" value="Sort By Section" class="btn btn-primary custom-btn" >
       </form>
-      <form method="POST" action="{%url 'MCChartByArea' object.pk%}" >
+      </th>
+      <th>
+        <form method="POST" action="{%url 'MCChartByArea' object.pk%}" >
         {% csrf_token %}
         <input type="submit" value="Sort By Category" class="btn btn-primary custom-btn" >
       </form>
-    </div>
+      </th>
+      </tr>
+        </thead>
+    </table>
 </div>
-    
+    </div>
+
+{%if DPC%}
 <canvas  id="myChart" width="40" height="16"></canvas>
 </div>
 <script>
@@ -63,6 +75,7 @@
     });
 </script>
 
+{%endif%}
 
 
 

@@ -85,7 +85,7 @@ class DPCRemark(models.Model):
     DPCSecArea = models.ForeignKey(DPCSec, on_delete=models.CASCADE,null=True, related_name='DPCSecArea1')
     DPCStatus = models.ForeignKey(Status, on_delete=models.CASCADE,null=True, related_name='DPCStatus')
     def __str__(self):
-        return self.DPCName.DPCName
+        return f"{self.DPCName}-{self.POHDate}-{self.DPCDefArea}-{self.DPCSecArea}-{self.DPCDef}"
 
 class TCArea(models.Model):
     TCCArea = models.CharField(max_length=100, blank=True, null=True, unique=True)
@@ -110,7 +110,7 @@ class TCRemark(models.Model):
     TCSecArea = models.ForeignKey(TCSec, on_delete=models.CASCADE,null=True, related_name='TCSecArea1')
     TCStatus = models.ForeignKey(Status, on_delete=models.CASCADE,null=True, related_name='TCStatus')
     def __str__(self):
-        return self.TCName.TCName
+        return f"{self.TCName}-{self.POHDate}-{self.TCDefArea}-{self.TCSecArea}-{self.TCDef}"
 
 class MCArea(models.Model):
     MCArea = models.CharField(max_length=100, blank=True, null=True, unique=True)
@@ -136,6 +136,6 @@ class MCRemark(models.Model):
     MCStatus = models.ForeignKey(Status, on_delete=models.CASCADE,null=True, related_name='MCStatus')
     MCDef = models.CharField(max_length=500, blank=True, null=True)
     def __str__(self):
-        return self.MCName.MCName
+        return f"{self.MCName}-{self.POHDate}-{self.MCDefArea}-{self.MCSecArea}-{self.MCDef}"
 
 
