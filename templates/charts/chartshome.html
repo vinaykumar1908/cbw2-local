@@ -41,8 +41,8 @@ Home
                 <th><form style="background-color:rgb(30, 144, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;" method="POST" action="{%url 'tcchart'%}">
                     
                     {% csrf_token %}
-                    <input type="text" name="datepicker3" style="background-color: white; color:black" placeholder="From"
-                        aria-label="From" id="datepicker3">
+                    <input type="text" name="datepicker3" style="background-color: white; color:black" placeholder="From*"
+                        aria-label="From*" id="datepicker3">
                     <script>
                         $(function () {
                             $("#datepicker3").datepicker({
@@ -50,7 +50,7 @@ Home
                             });
                         });
                     </script>
-                    <input type="text" name="datepicker4" style="background-color: white; color:black" placeholder="To" aria-label="To"
+                    <input type="text" name="datepicker4" style="background-color: white; color:black" placeholder="To*" aria-label="To*"
                         id="datepicker4">
                 
                     <script>
@@ -60,7 +60,23 @@ Home
                             });
                         });
                     </script>
-                    <input type="submit" value="TC" style="background-color: lightcoral; color:black" />
+                    <br>
+                    <input type="text" id="TCPart" name="TCPart" style="background-color: white; color:black" placeholder="Category"
+                aria-label="Category" />
+                <script>
+                    $("#TCPart").autocomplete({
+                        source: '{%url 'TCpartAutocomplete'%}'
+                                    });
+                </script>
+                <input type="text" id="TCDef" name="TCDef" style="background-color: white; color:black" placeholder="Section"
+                aria-label="Section" />
+                <script>
+                    $("#TCDef").autocomplete({
+                        source: '{%url 'TCdefAutocomplete'%}'
+                                        });
+                </script>
+                <br>
+                    <input type="submit" value="TC Search" style="background-color: lightcoral; color:black" />
                 </form></th>
                 <th><form
                     style="background-color:rgb(30, 144, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
@@ -94,7 +110,7 @@ Home
 </div>
 <div class='center'>
     {%if RolStock%}
-<h3>{{RolStock}}: Failure Cases Breakup from {{from}} to {{to}}</h3>
+<h3>{{RolStock}}: Failure Cases Breakup for {%if PartDisplay %}{{PartDisplay}}{%endif%} from {{from}} to {{to}}</h3>
 {%endif%}
 <canvas  id="myChart" width="40" height="16"></canvas>
 </div>

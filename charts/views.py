@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.db.models import Q
 from datetime import date, datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from defi.models import DPC, TC, MC, DPCArea, DPCRemark, MCArea, MCRemark, TCArea, TCRemark, DPCSec, TCSec, MCSec
@@ -65,13 +65,16 @@ def tcchart(request):
     qs2 = TCArea.objects.all()
     qs4 = TCRemark.objects.all().order_by('-Date').filter(POHDate__lt=request.POST.get('datepicker4'), POHDate__gt=request.POST.get('datepicker3'))
     qs5 = TCSec.objects.all()
+    lo = TCArea.objects.get(TCCArea=request.POST.get('TCPart'))
+    print(lo.id)
     defi = []
-    for x in qs2:
-        defi.append(str(x.TCCArea))
+    for x in qs6:
+        defi.append(str(x.TCName))
     print(defi)
     list1 = []
-    for x in qs2:
-        q = TCRemark.objects.all().filter(POHDate__lt=request.POST.get('datepicker4'), POHDate__gt=request.POST.get('datepicker3')).filter(TCDefArea=x.id).count()
+    for x in qs6:
+        qr = qs4.filter(TCName=x.id)
+        q = qr.filter(TCDefArea=lo.id).count()
         print(q)
         list1.append(str(q))
         print('appended list')
@@ -82,6 +85,7 @@ def tcchart(request):
         'time': currdate,
         'freq': list1,
         'RolStock' : 'TC',
+        'PartDisplay' : lo.TCCArea,
         'from' : request.POST.get('datepicker3'),
         'to' : request.POST.get('datepicker4')
     }

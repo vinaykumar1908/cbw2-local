@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.homeView, name='home'),
     path('charts/', include('charts.urls')),
     path('defi/', include('defi.urls')),
+    path('rake/', include('rake.urls')),
     #path('ROH/', include('ROH.urls')),
     #path('sickline/', include('sickline.urls')),
     #path('yard/', include('yard.urls')),
