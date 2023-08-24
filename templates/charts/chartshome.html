@@ -17,7 +17,7 @@ Home
                 <th><form style="background-color:rgb(30, 144, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;" method="POST" action="{%url 'dpcchart'%}">
                     
                     {% csrf_token %}
-                    <input type="text" name="datepicker1" style="background-color: white; color:black" placeholder="From" aria-label="From" id="datepicker1">
+                    <input type="text" name="datepicker1" style="background-color: white; color:black" placeholder="From*" aria-label="From*" id="datepicker1">
                     <script>
                         $(function () {
                             $("#datepicker1").datepicker({
@@ -25,7 +25,7 @@ Home
                             });
                         });
                     </script>
-                    <input type="text" name="datepicker2" style="background-color: white; color:black" placeholder="To"
+                    <input type="text" name="datepicker2" style="background-color: white; color:black" placeholder="To*"
                         aria-label="To" id="datepicker2">
                 
                     <script>
@@ -142,7 +142,7 @@ Home
 </div>
 <div class='center'>
     {%if RolStock%}
-<h3>{{RolStock}}: Failure Cases Breakup for {%if PartDisplay %}{{PartDisplay}}{%endif%} {%if SectionDisplay %} belonging to {{SectionDisplay}} Section{%endif%} from {{from}} to {{to}}</h3>
+<h3>{{RolStock}}: Failure Cases Breakup {%if PartDisplay %}for {{PartDisplay}}{%endif%} {%if SectionDisplay %} belonging to {{SectionDisplay}} Section{%endif%} from {{from}} to {{to}}</h3>
 {%endif%}
 <canvas  id="myChart" width="40" height="16"></canvas>
 </div>

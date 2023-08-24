@@ -26,6 +26,39 @@ def dpcchart(request):
         lo = DPCArea.objects.get(DPCArea=request.POST.get('DPCPart'))
     if request.POST.get('DPCDef'):
         po = DPCSec.objects.get(DPCSec=request.POST.get('DPCDef'))
+    if not request.POST.get('DPCPart') and not request.POST.get('DPCDef'):
+        defi = []
+        for x in qs6:
+            defi.append(str(x.DPCName))
+        list1 = []
+        for x in qs6:
+            qr = qs4.filter(DPCName=x.id)
+            q = qr.count()
+            list1.append(str(q))
+        list2 = []
+        for x in qs6:
+            qr = qs4.filter(DPCName=x.id)
+            q = qr.count()
+            print(q)
+            if q != 0:
+                p = qr
+                for x in p:
+                    list2.append(x)
+                    print(p)
+            else:
+                pass
+                print(list2)
+        context = {
+            'DPC': defi,
+            'time': currdate,
+            'freq': list1,
+            'RolStock' : 'DPC',
+            'PartDisplay' : '',
+            'SectionDisplay' : '',
+            'from' : request.POST.get('datepicker1'),
+            'to' : request.POST.get('datepicker2'),
+            'q' : list2,
+        }
     if request.POST.get('DPCPart') and not request.POST.get('DPCDef'):
         defi = []
         for x in qs6:
@@ -136,6 +169,39 @@ def tcchart(request):
     print(request.POST.get('TCDef'))
     if request.POST.get('TCDef'):
         po = TCSec.objects.get(TCSec=request.POST.get('TCDef'))
+    if not request.POST.get('TCPart') and not request.POST.get('TCDef'):
+        defi = []
+        for x in qs6:
+            defi.append(str(x.TCName))
+        list1 = []
+        for x in qs6:
+            qr = qs4.filter(TCName=x.id)
+            q = qr.count()
+            list1.append(str(q))
+        list2 = []
+        for x in qs6:
+            qr = qs4.filter(TCName=x.id)
+            q = qr.count()
+            print(q)
+            if q != 0:
+                p = qr
+                for x in p:
+                    list2.append(x)
+                    print(p)
+            else:
+                pass
+                print(list2)
+        context = {
+            'DPC': defi,
+            'time': currdate,
+            'freq': list1,
+            'RolStock' : 'TC',
+            'PartDisplay' : '',
+            'SectionDisplay' : '',
+            'from' : request.POST.get('datepicker3'),
+            'to' : request.POST.get('datepicker4'),
+            'q' : list2,
+        }
     if request.POST.get('TCPart') and not request.POST.get('TCDef'):
         defi = []
         for x in qs6:
@@ -245,6 +311,40 @@ def mcchart(request):
         lo = MCArea.objects.get(MCArea=request.POST.get('MCPart'))
     if request.POST.get('MCDef'):
         po = MCSec.objects.get(MCSec=request.POST.get('MCDef'))
+    if not request.POST.get('MCPart') and not request.POST.get('MCDef'):
+        defi = []
+        for x in qs6:
+            defi.append(str(x.MCName))
+        list1 = []
+        for x in qs6:
+            qr = qs4.filter(MCName=x.id)
+            q = qr.count()
+            list1.append(str(q))
+        list2 = []
+        for x in qs6:
+            qr = qs4.filter(MCName=x.id)
+            q = qr.count()
+            print(q)
+            if q != 0:
+                p = qr
+                for x in p:
+                    list2.append(x)
+                    print(p)
+            else:
+                pass
+                print(list2)
+        context = {
+            'DPC': defi,
+            'time': currdate,
+            'freq': list1,
+            'RolStock' : 'MC',
+            'PartDisplay' : '',
+            'SectionDisplay' : '',
+            'from' : request.POST.get('datepicker5'),
+            'to' : request.POST.get('datepicker6'),
+            'q' : list2,
+        }
+        
     if request.POST.get('MCPart') and not request.POST.get('MCDef'):
         defi = []
         for x in qs6:
