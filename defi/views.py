@@ -470,33 +470,30 @@ def AddMC(request):
 
 @login_required
 def showDPCdet(request, Serial):
-    q = DPC.objects.get(id=Serial)
     print("--------------------**------------------")
+    p = DPC.objects.get(id=Serial)
+    q = DPCRemark.objects.filter(DPCName=p.id).order_by('-Date')
     print(q)
-    p = DPCRemark.objects.filter(DPCName=q.id).order_by('-Date')
-    defi = []
-    qs2 = DPCArea.objects.all()
-    list1 = []
-    for x in qs2:
-        u = DPCRemark.objects.all().filter(POHDate=q.POHDate).filter(DPCDefArea=x.id).count()
-        if u == 0:
-            pass
-        else:
-            print(u)
-            list1.append(str(u))
-            defi.append(str(x.DPCArea))
-        print('appended list')
-        print(list1)
-    
     context = {
         #'messages': message,
-        'object': q,
-        'q' : p,
-        'DPC': defi,
-        'freq': list1 ,
+        'object': p,
+        'q' : q,
     }
     return render(request, 'deficiencies/dpcdefdet.html', context)
 
+@login_required
+def showDPCdet2(request, Serial):
+    print("--------------------**------------------")
+    p = DPCRemark.objects.get(id=Serial)
+    a = DPC.objects.get(DPCName=p.DPCName)
+    q = DPCRemark.objects.filter(DPCName=p.DPCName).order_by('-Date')
+    print(q)
+    context = {
+        #'messages': message,
+        'object': a,
+        'q' : q,
+    }
+    return render(request, 'deficiencies/dpcdefdet.html', context)
 @login_required
 def showTCdet(request, Serial):
     print("--------------------**------------------")
@@ -511,6 +508,20 @@ def showTCdet(request, Serial):
     return render(request, 'deficiencies/tcdefdet.html', context)
 
 @login_required
+def showTCdet2(request, Serial):
+    print("--------------------**------------------")
+    p = TCRemark.objects.get(id=Serial)
+    a = TC.objects.get(TCName=p.TCName)
+    q = TCRemark.objects.filter(TCName=p.TCName).order_by('-Date')
+    print(q)
+    context = {
+        #'messages': message,
+        'object': a,
+        'q' : q,
+    }
+    return render(request, 'deficiencies/tcdefdet.html', context)
+
+@login_required
 def showMCdet(request, Serial):
     p = MC.objects.get(id=Serial)
     q = MCRemark.objects.filter(MCName=p.id).order_by('-Date')
@@ -518,6 +529,21 @@ def showMCdet(request, Serial):
     context = {
         #'messages': message,
         'object': p,
+        'q' : q,
+
+    }
+    print(context)
+    return render(request, 'deficiencies/mcdefdet.html', context)
+
+@login_required
+def showMCdet2(request, Serial):
+    p = MCRemark.objects.get(id=Serial)
+    a = MC.objects.get(MCName=p.MCName)
+    q = MCRemark.objects.filter(MCName=p.MCName).order_by('-Date')
+    print(q)
+    context = {
+        #'messages': message,
+        'object': a,
         'q' : q,
 
     }

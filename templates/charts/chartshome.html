@@ -183,6 +183,38 @@ Home
         }
     });
 </script>
+{%if RolStock == 'DPC'%}
+<div class="center">
+    <div style="flex-grow: 8; background-color:DodgerBlue;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Rolling Stock</th>
+                        <th>Category</th>
+                        <th>Section</th>
+                        
+                        <th>Details</th>
+                        <th>Status</th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                {%for obj in q %}
+                <tr class='danger'>
+                    <td class='text-primary'>{{forloop.counter}}</td>
+                    <td class='text-primary'><a href="{%url 'showDPCdet' obj.pk %}" >{{obj.DPCName}}</a></td>
+                    <td class='text-primary'>{{obj.DPCDefArea}}</td>
+                        <td class='text-primary'>{{obj.DPCSecArea}}</td>
+                        <td class='text-primary'>{{obj.DPCDef}}</td>
+                        <td class='text-primary'>{{obj.DPCStatus}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+    
+        </table>
+    </div>
+    {%endif%}
 
 {%if RolStock == 'TC'%}
 <div class="center">
@@ -204,7 +236,7 @@ Home
                 {%for obj in q %}
                 <tr class='danger'>
                     <td class='text-primary'>{{forloop.counter}}</td>
-                    <td class='text-primary'>{{obj.TCName}}</td>
+                    <td class='text-primary'><a href="{%url 'showTCdet2' obj.pk %}" >{{obj.TCName}}</a></td>
                     <td class='text-primary'>{{obj.TCDefArea}}</td>
                         <td class='text-primary'>{{obj.TCSecArea}}</td>
                         <td class='text-primary'>{{obj.TCDef}}</td>
@@ -237,7 +269,7 @@ Home
                     {%for obj in q %}
                     <tr class='danger'>
                         <td class='text-primary'>{{forloop.counter}}</td>
-                        <td class='text-primary'>{{obj.MCName}}</td>
+                        <td class='text-primary'><a href="{%url 'showMCdet2' obj.pk %}" >{{obj.MCName}}</a></td>
                         <td class='text-primary'>{{obj.MCDefArea}}</td>
                             <td class='text-primary'>{{obj.MCSecArea}}</td>
                             <td class='text-primary'>{{obj.MCDef}}</td>
