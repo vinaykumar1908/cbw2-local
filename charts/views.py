@@ -18,111 +18,328 @@ def chartshome(request):
 
 @login_required
 def dpcchart(request):
-    RakeName = []
-    BrakeBlock = []
     currdate = date.today()
-    currmonth = currdate.month
-    currmonth = currdate.month
-    curryear = currdate.year
-    yesterday = date.today() - timedelta(days=1)
-    qs6 = DPC.objects.all().order_by('-Date')
-    qs2 = DPCArea.objects.all()
-    qs4 = DPCRemark.objects.all().order_by('-POHDate').filter(POHDate__lt=request.POST.get('datepicker'), POHDate__gt=request.POST.get('datepicker1'))
-    qs5 = DPCSec.objects.all()
-    defi = []
-    for x in qs2:
-        defi.append(str(x.DPCArea))
-    print(defi)
-    list1 = []
-    for x in qs2:
-        q = DPCRemark.objects.all().order_by('-POHDate').filter(POHDate__lt=request.POST.get('datepicker'), POHDate__gt=request.POST.get('datepicker1')).filter(DPCDefArea=x.id).count()
-        print(q)
-        list1.append(str(q))
-        print('appended list')
-        print(list1)
-    
-    
-    context = {
-        'DPC': defi,
-        'time': currdate,
-        'freq': list1 ,
-        'RolStock' : 'DPC',
-        'from' : request.POST.get('datepicker1'),
-        'to' : request.POST.get('datepicker')
-    }
+    print(request.POST.get('datepicker6'))
+    qs6 = DPC.objects.all().order_by('-Date').filter(POHDate__lt=request.POST.get('datepicker1'), POHDate__gt=request.POST.get('datepicker2'))
+    qs4 = DPCRemark.objects.all().order_by('-Date').filter(POHDate__lt=request.POST.get('datepicker1'), POHDate__gt=request.POST.get('datepicker2'))
+    if request.POST.get('DPCPart'):
+        lo = DPCArea.objects.get(DPCArea=request.POST.get('DPCPart'))
+    if request.POST.get('DPCDef'):
+        po = DPCSec.objects.get(DPCSec=request.POST.get('DPCDef'))
+    if request.POST.get('DPCPart') and not request.POST.get('DPCDef'):
+        defi = []
+        for x in qs6:
+            defi.append(str(x.DPCName))
+        list1 = []
+        for x in qs6:
+            qr = qs4.filter(DPCName=x.id)
+            q = qr.filter(DPCDefArea=lo.id).count()
+            list1.append(str(q))
+        list2 = []
+        for x in qs6:
+            qr = qs4.filter(DPCName=x.id)
+            q = qr.filter(DPCDefArea=lo.id).count()
+            if q != 0:
+                p = qr.filter(DPCDefArea=lo.id)
+                for x in p:
+                    list2.append(x)
+                    print(p)
+            else:
+                pass
+        context = {
+            'DPC': defi,
+            'time': currdate,
+            'freq': list1,
+            'RolStock' : 'DPC',
+            'PartDisplay' : lo.DPCArea,
+            'SectionDisplay' : '',
+            'from' : request.POST.get('datepicker5'),
+            'to' : request.POST.get('datepicker6'),
+            'q' : list2,
+        }
+    elif request.POST.get('DPCDef') and not request.POST.get('DPCPart'):
+        defi = []
+        for x in qs6:
+            defi.append(str(x.DPCName))
+        list1 = []
+        for x in qs6:
+            qr = qs4.filter(DPCName=x.id)
+            q = qr.filter(DPCSecArea=po.id).count()
+            list1.append(str(q))
+        list2 = []
+        for x in qs6:
+            qr = qs4.filter(DPCName=x.id)
+            q = qr.filter(DPCSecArea=po.id).count()
+            if q != 0:
+                p = qr.filter(DPCSecArea=po.id)
+                for x in p:
+                    list2.append(x)
+                    print(p)
+            else:
+                pass
+
+        context = {
+            'DPC': defi,
+            'time': currdate,
+            'freq': list1,
+            'RolStock' : 'DPC',
+            'PartDisplay' : '',
+            'SectionDisplay' : po.DPCSec,
+            'from' : request.POST.get('datepicker5'),
+            'to' : request.POST.get('datepicker6'),
+            'q' : list2,
+        }
+    elif request.POST.get('DPCDef') and request.POST.get('DPCPart'):
+        defi = []
+        for x in qs6:
+            
+            defi.append(str(x.DPCName))
+        list1 = []
+        for x in qs6:
+            qr = qs4.filter(DPCName=x.id)
+            q = qr.filter(DPCSecArea=po.id).filter(DPCDefArea=lo.id).count()
+            list1.append(str(q))
+        list2 = []
+        for x in qs6:
+            qr = qs4.filter(DPCName=x.id)
+            q = qr.filter(DPCSecArea=po.id).filter(DPCDefArea=lo.id).count()
+            print(q)
+            if q != 0:
+                p = qr.filter(DPCSecArea=po.id).filter(DPCDefArea=lo.id)
+                for x in p:
+                    list2.append(x)
+                    print(p)
+            else:
+                pass
+                print(list2)
+        context = {
+            'DPC': defi,
+            'time': currdate,
+            'freq': list1,
+            'RolStock' : 'DPC',
+            'PartDisplay' : lo.DPCArea,
+            'SectionDisplay' : po.DPCSec,
+            'from' : request.POST.get('datepicker5'),
+            'to' : request.POST.get('datepicker6'),
+            'q' : list2,
+        }
     return render(request, 'charts/chartshome.html', context)
+
 
 @login_required
 def tcchart(request):
-    RakeName = []
-    BrakeBlock = []
     currdate = date.today()
-    currmonth = currdate.month
-    currmonth = currdate.month
-    curryear = currdate.year
-    yesterday = date.today() - timedelta(days=1)
-    qs6 = TC.objects.all().order_by('-Date')
-    qs2 = TCArea.objects.all()
+    qs6 = TC.objects.all().order_by('-Date').filter(POHDate__lt=request.POST.get('datepicker4'), POHDate__gt=request.POST.get('datepicker3'))
     qs4 = TCRemark.objects.all().order_by('-Date').filter(POHDate__lt=request.POST.get('datepicker4'), POHDate__gt=request.POST.get('datepicker3'))
-    qs5 = TCSec.objects.all()
-    lo = TCArea.objects.get(TCCArea=request.POST.get('TCPart'))
-    print(lo.id)
-    defi = []
-    for x in qs6:
-        defi.append(str(x.TCName))
-    print(defi)
-    list1 = []
-    for x in qs6:
-        qr = qs4.filter(TCName=x.id)
-        q = qr.filter(TCDefArea=lo.id).count()
-        print(q)
-        list1.append(str(q))
-        print('appended list')
-        print(list1)
-    
-    context = {
-        'DPC': defi,
-        'time': currdate,
-        'freq': list1,
-        'RolStock' : 'TC',
-        'PartDisplay' : lo.TCCArea,
-        'from' : request.POST.get('datepicker3'),
-        'to' : request.POST.get('datepicker4')
-    }
+    if request.POST.get('TCPart'):
+        lo = TCArea.objects.get(TCCArea=request.POST.get('TCPart'))
+    print(request.POST.get('TCDef'))
+    if request.POST.get('TCDef'):
+        po = TCSec.objects.get(TCSec=request.POST.get('TCDef'))
+    if request.POST.get('TCPart') and not request.POST.get('TCDef'):
+        defi = []
+        for x in qs6:
+            defi.append(str(x.TCName))
+        list1 = []
+        for x in qs6:
+            qr = qs4.filter(TCName=x.id)
+            q = qr.filter(TCDefArea=lo.id).count()
+            list1.append(str(q))
+        list2 = []
+        for x in qs6:
+            qr = qs4.filter(TCName=x.id)
+            q = qr.filter(TCDefArea=lo.id).count()
+            if q != 0:
+                p = qr.filter(TCDefArea=lo.id)
+                for x in p:
+                    list2.append(x)
+                    print(p)
+            else:
+                pass
+        context = {
+            'DPC': defi,
+            'time': currdate,
+            'freq': list1,
+            'RolStock' : 'TC',
+            'PartDisplay' : lo.TCCArea,
+            'SectionDisplay' : '',
+            'from' : request.POST.get('datepicker3'),
+            'to' : request.POST.get('datepicker4'),
+            'q' : list2,
+        }
+    elif request.POST.get('TCDef') and not request.POST.get('TCPart'):
+        defi = []
+        for x in qs6:
+            defi.append(str(x.TCName))
+        list1 = []
+        for x in qs6:
+            qr = qs4.filter(TCName=x.id)
+            q = qr.filter(TCSecArea=po.id).count()
+            list1.append(str(q))
+        list2 = []
+        for x in qs6:
+            qr = qs4.filter(TCName=x.id)
+            q = qr.filter(TCSecArea=po.id).count()
+            if q != 0:
+                p = qr.filter(TCSecArea=po.id)
+                for x in p:
+                    list2.append(x)
+                    print(p)
+            else:
+                pass
+
+        context = {
+            'DPC': defi,
+            'time': currdate,
+            'freq': list1,
+            'RolStock' : 'TC',
+            'PartDisplay' : '',
+            'SectionDisplay' : po.TCSec,
+            'from' : request.POST.get('datepicker3'),
+            'to' : request.POST.get('datepicker4'),
+            'q' : list2,
+        }
+    elif request.POST.get('TCDef') and request.POST.get('TCPart'):
+        defi = []
+        for x in qs6:
+            defi.append(str(x.TCName))
+        list1 = []
+        for x in qs6:
+            qr = qs4.filter(TCName=x.id)
+            q = qr.filter(TCSecArea=po.id).filter(TCDefArea=lo.id).count()
+            list1.append(str(q))
+        list2 = []
+        for x in qs6:
+            qr = qs4.filter(TCName=x.id)
+            q = qr.filter(TCSecArea=po.id).filter(TCDefArea=lo.id).count()
+            print(q)
+            if q != 0:
+                p = qr.filter(TCSecArea=po.id).filter(TCDefArea=lo.id)
+                for x in p:
+                    list2.append(x)
+                    print(p)
+            else:
+                pass
+                print(list2)
+        context = {
+            'DPC': defi,
+            'time': currdate,
+            'freq': list1,
+            'RolStock' : 'TC',
+            'PartDisplay' : lo.TCCArea,
+            'SectionDisplay' : po.TCSec,
+            'from' : request.POST.get('datepicker3'),
+            'to' : request.POST.get('datepicker4'),
+            'q' : list2,
+        }
     return render(request, 'charts/chartshome.html', context)
 
 
 @login_required
 def mcchart(request):
-    RakeName = []
-    BrakeBlock = []
     currdate = date.today()
-    currmonth = currdate.month
-    currmonth = currdate.month
-    curryear = currdate.year
-    yesterday = date.today() - timedelta(days=1)
-    qs6 = MC.objects.all().order_by('-Date')
-    qs2 = MCArea.objects.all()
+    print(request.POST.get('datepicker6'))
+    qs6 = MC.objects.all().order_by('-Date').filter(POHDate__lt=request.POST.get('datepicker6'), POHDate__gt=request.POST.get('datepicker5'))
     qs4 = MCRemark.objects.all().order_by('-Date').filter(POHDate__lt=request.POST.get('datepicker6'), POHDate__gt=request.POST.get('datepicker5'))
-    qs5 = MCSec.objects.all()
-    defi = []
-    for x in qs2:
-        defi.append(str(x.MCArea))
-    print(defi)
-    list1 = []
-    for x in qs2:
-        q = MCRemark.objects.all().filter(POHDate__lt=request.POST.get('datepicker6'), POHDate__gt=request.POST.get('datepicker5')).filter(MCDefArea=x.id).count()
-        print(q)
-        list1.append(str(q))
-        print('appended list')
-        print(list1)
-    
-    context = {
-        'DPC': defi,
-        'time': currdate,
-        'freq': list1,
-        'RolStock' : 'MC',
-        'from' : request.POST.get('datepicker5'),
-        'to' : request.POST.get('datepicker6')
-    }
+    if request.POST.get('MCPart'):
+        lo = MCArea.objects.get(MCArea=request.POST.get('MCPart'))
+    if request.POST.get('MCDef'):
+        po = MCSec.objects.get(MCSec=request.POST.get('MCDef'))
+    if request.POST.get('MCPart') and not request.POST.get('MCDef'):
+        defi = []
+        for x in qs6:
+            defi.append(str(x.MCName))
+        list1 = []
+        for x in qs6:
+            qr = qs4.filter(MCName=x.id)
+            q = qr.filter(MCDefArea=lo.id).count()
+            list1.append(str(q))
+        list2 = []
+        for x in qs6:
+            qr = qs4.filter(MCName=x.id)
+            q = qr.filter(MCDefArea=lo.id).count()
+            if q != 0:
+                p = qr.filter(MCDefArea=lo.id)
+                for x in p:
+                    list2.append(x)
+                    print(p)
+            else:
+                pass
+        context = {
+            'DPC': defi,
+            'time': currdate,
+            'freq': list1,
+            'RolStock' : 'MC',
+            'PartDisplay' : lo.MCArea,
+            'SectionDisplay' : '',
+            'from' : request.POST.get('datepicker5'),
+            'to' : request.POST.get('datepicker6'),
+            'q' : list2,
+        }
+    elif request.POST.get('MCDef') and not request.POST.get('MCPart'):
+        defi = []
+        for x in qs6:
+            defi.append(str(x.MCName))
+        list1 = []
+        for x in qs6:
+            qr = qs4.filter(MCName=x.id)
+            q = qr.filter(MCSecArea=po.id).count()
+            list1.append(str(q))
+        list2 = []
+        for x in qs6:
+            qr = qs4.filter(MCName=x.id)
+            q = qr.filter(MCSecArea=po.id).count()
+            if q != 0:
+                p = qr.filter(MCSecArea=po.id)
+                for x in p:
+                    list2.append(x)
+                    print(p)
+            else:
+                pass
+
+        context = {
+            'DPC': defi,
+            'time': currdate,
+            'freq': list1,
+            'RolStock' : 'MC',
+            'PartDisplay' : '',
+            'SectionDisplay' : po.MCSec,
+            'from' : request.POST.get('datepicker5'),
+            'to' : request.POST.get('datepicker6'),
+            'q' : list2,
+        }
+    elif request.POST.get('MCDef') and request.POST.get('MCPart'):
+        defi = []
+        for x in qs6:
+
+            defi.append(str(x.MCName))
+        list1 = []
+        for x in qs6:
+            qr = qs4.filter(MCName=x.id)
+            q = qr.filter(MCSecArea=po.id).filter(MCDefArea=lo.id).count()
+            list1.append(str(q))
+        list2 = []
+        for x in qs6:
+            qr = qs4.filter(MCName=x.id)
+            q = qr.filter(MCSecArea=po.id).filter(MCDefArea=lo.id).count()
+            print(q)
+            if q != 0:
+                p = qr.filter(MCSecArea=po.id).filter(MCDefArea=lo.id)
+                for x in p:
+                    list2.append(x)
+                    print(p)
+            else:
+                pass
+                print(list2)
+        context = {
+            'DPC': defi,
+            'time': currdate,
+            'freq': list1,
+            'RolStock' : 'MC',
+            'PartDisplay' : lo.MCArea,
+            'SectionDisplay' : po.MCSec,
+            'from' : request.POST.get('datepicker5'),
+            'to' : request.POST.get('datepicker6'),
+            'q' : list2,
+        }
     return render(request, 'charts/chartshome.html', context)
