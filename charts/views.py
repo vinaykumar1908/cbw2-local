@@ -28,19 +28,19 @@ def dpcchart(request):
         po = DPCSec.objects.get(DPCSec=request.POST.get('DPCDef'))
     if not request.POST.get('DPCPart') and not request.POST.get('DPCDef'):
         defi = []
-        for x in qs6:
-            defi.append(str(x.DPCName))
         list1 = []
         for x in qs6:
             qr = qs4.filter(DPCName=x.id)
             q = qr.count()
-            list1.append(str(q))
+            if q != 0:
+                list1.append(str(q))
         list2 = []
         for x in qs6:
             qr = qs4.filter(DPCName=x.id)
             q = qr.count()
             print(q)
             if q != 0:
+                defi.append(str(x.DPCName))
                 p = qr
                 for x in p:
                     list2.append(x)
@@ -61,18 +61,18 @@ def dpcchart(request):
         }
     if request.POST.get('DPCPart') and not request.POST.get('DPCDef'):
         defi = []
-        for x in qs6:
-            defi.append(str(x.DPCName))
         list1 = []
         for x in qs6:
             qr = qs4.filter(DPCName=x.id)
             q = qr.filter(DPCDefArea=lo.id).count()
-            list1.append(str(q))
+            if q != 0:
+                list1.append(str(q))
         list2 = []
         for x in qs6:
             qr = qs4.filter(DPCName=x.id)
             q = qr.filter(DPCDefArea=lo.id).count()
             if q != 0:
+                defi.append(str(x.DPCName))
                 p = qr.filter(DPCDefArea=lo.id)
                 for x in p:
                     list2.append(x)
@@ -92,18 +92,18 @@ def dpcchart(request):
         }
     elif request.POST.get('DPCDef') and not request.POST.get('DPCPart'):
         defi = []
-        for x in qs6:
-            defi.append(str(x.DPCName))
         list1 = []
         for x in qs6:
             qr = qs4.filter(DPCName=x.id)
             q = qr.filter(DPCSecArea=po.id).count()
-            list1.append(str(q))
+            if q != 0:
+                list1.append(str(q))
         list2 = []
         for x in qs6:
             qr = qs4.filter(DPCName=x.id)
             q = qr.filter(DPCSecArea=po.id).count()
             if q != 0:
+                defi.append(str(x.DPCName))
                 p = qr.filter(DPCSecArea=po.id)
                 for x in p:
                     list2.append(x)
@@ -124,20 +124,19 @@ def dpcchart(request):
         }
     elif request.POST.get('DPCDef') and request.POST.get('DPCPart'):
         defi = []
-        for x in qs6:
-            
-            defi.append(str(x.DPCName))
         list1 = []
         for x in qs6:
             qr = qs4.filter(DPCName=x.id)
             q = qr.filter(DPCSecArea=po.id).filter(DPCDefArea=lo.id).count()
-            list1.append(str(q))
+            if q != 0:
+                list1.append(str(q))
         list2 = []
         for x in qs6:
             qr = qs4.filter(DPCName=x.id)
             q = qr.filter(DPCSecArea=po.id).filter(DPCDefArea=lo.id).count()
             print(q)
             if q != 0:
+                defi.append(str(x.DPCName))
                 p = qr.filter(DPCSecArea=po.id).filter(DPCDefArea=lo.id)
                 for x in p:
                     list2.append(x)
@@ -171,19 +170,19 @@ def tcchart(request):
         po = TCSec.objects.get(TCSec=request.POST.get('TCDef'))
     if not request.POST.get('TCPart') and not request.POST.get('TCDef'):
         defi = []
-        for x in qs6:
-            defi.append(str(x.TCName))
         list1 = []
         for x in qs6:
             qr = qs4.filter(TCName=x.id)
             q = qr.count()
-            list1.append(str(q))
+            if q != 0:
+                list1.append(str(q))
         list2 = []
         for x in qs6:
             qr = qs4.filter(TCName=x.id)
             q = qr.count()
             print(q)
             if q != 0:
+                defi.append(str(x.TCName))
                 p = qr
                 for x in p:
                     list2.append(x)
@@ -204,18 +203,18 @@ def tcchart(request):
         }
     if request.POST.get('TCPart') and not request.POST.get('TCDef'):
         defi = []
-        for x in qs6:
-            defi.append(str(x.TCName))
         list1 = []
         for x in qs6:
             qr = qs4.filter(TCName=x.id)
             q = qr.filter(TCDefArea=lo.id).count()
-            list1.append(str(q))
+            if q != 0:
+                list1.append(str(q))
         list2 = []
         for x in qs6:
             qr = qs4.filter(TCName=x.id)
             q = qr.filter(TCDefArea=lo.id).count()
             if q != 0:
+                defi.append(str(x.TCName))
                 p = qr.filter(TCDefArea=lo.id)
                 for x in p:
                     list2.append(x)
@@ -235,18 +234,18 @@ def tcchart(request):
         }
     elif request.POST.get('TCDef') and not request.POST.get('TCPart'):
         defi = []
-        for x in qs6:
-            defi.append(str(x.TCName))
         list1 = []
         for x in qs6:
             qr = qs4.filter(TCName=x.id)
             q = qr.filter(TCSecArea=po.id).count()
-            list1.append(str(q))
+            if q != 0:
+                list1.append(str(q))
         list2 = []
         for x in qs6:
             qr = qs4.filter(TCName=x.id)
             q = qr.filter(TCSecArea=po.id).count()
             if q != 0:
+                defi.append(str(x.TCName))
                 p = qr.filter(TCSecArea=po.id)
                 for x in p:
                     list2.append(x)
@@ -267,19 +266,19 @@ def tcchart(request):
         }
     elif request.POST.get('TCDef') and request.POST.get('TCPart'):
         defi = []
-        for x in qs6:
-            defi.append(str(x.TCName))
         list1 = []
         for x in qs6:
             qr = qs4.filter(TCName=x.id)
             q = qr.filter(TCSecArea=po.id).filter(TCDefArea=lo.id).count()
-            list1.append(str(q))
+            if q != 0:
+                list1.append(str(q))
         list2 = []
         for x in qs6:
             qr = qs4.filter(TCName=x.id)
             q = qr.filter(TCSecArea=po.id).filter(TCDefArea=lo.id).count()
             print(q)
             if q != 0:
+                defi.append(str(x.TCName))
                 p = qr.filter(TCSecArea=po.id).filter(TCDefArea=lo.id)
                 for x in p:
                     list2.append(x)
@@ -313,19 +312,19 @@ def mcchart(request):
         po = MCSec.objects.get(MCSec=request.POST.get('MCDef'))
     if not request.POST.get('MCPart') and not request.POST.get('MCDef'):
         defi = []
-        for x in qs6:
-            defi.append(str(x.MCName))
         list1 = []
         for x in qs6:
             qr = qs4.filter(MCName=x.id)
             q = qr.count()
-            list1.append(str(q))
+            if q != 0:
+                list1.append(str(q))
         list2 = []
         for x in qs6:
             qr = qs4.filter(MCName=x.id)
             q = qr.count()
             print(q)
             if q != 0:
+                defi.append(str(x.MCName))
                 p = qr
                 for x in p:
                     list2.append(x)
@@ -347,18 +346,18 @@ def mcchart(request):
         
     if request.POST.get('MCPart') and not request.POST.get('MCDef'):
         defi = []
-        for x in qs6:
-            defi.append(str(x.MCName))
         list1 = []
         for x in qs6:
             qr = qs4.filter(MCName=x.id)
             q = qr.filter(MCDefArea=lo.id).count()
-            list1.append(str(q))
+            if q != 0:
+                list1.append(str(q))
         list2 = []
         for x in qs6:
             qr = qs4.filter(MCName=x.id)
             q = qr.filter(MCDefArea=lo.id).count()
             if q != 0:
+                defi.append(str(x.MCName))
                 p = qr.filter(MCDefArea=lo.id)
                 for x in p:
                     list2.append(x)
@@ -378,18 +377,18 @@ def mcchart(request):
         }
     elif request.POST.get('MCDef') and not request.POST.get('MCPart'):
         defi = []
-        for x in qs6:
-            defi.append(str(x.MCName))
         list1 = []
         for x in qs6:
             qr = qs4.filter(MCName=x.id)
             q = qr.filter(MCSecArea=po.id).count()
-            list1.append(str(q))
+            if q != 0:
+                list1.append(str(q))
         list2 = []
         for x in qs6:
             qr = qs4.filter(MCName=x.id)
             q = qr.filter(MCSecArea=po.id).count()
             if q != 0:
+                defi.append(str(x.MCName))
                 p = qr.filter(MCSecArea=po.id)
                 for x in p:
                     list2.append(x)
@@ -410,20 +409,19 @@ def mcchart(request):
         }
     elif request.POST.get('MCDef') and request.POST.get('MCPart'):
         defi = []
-        for x in qs6:
-
-            defi.append(str(x.MCName))
         list1 = []
         for x in qs6:
             qr = qs4.filter(MCName=x.id)
             q = qr.filter(MCSecArea=po.id).filter(MCDefArea=lo.id).count()
-            list1.append(str(q))
+            if q != 0:
+                list1.append(str(q))
         list2 = []
         for x in qs6:
             qr = qs4.filter(MCName=x.id)
             q = qr.filter(MCSecArea=po.id).filter(MCDefArea=lo.id).count()
             print(q)
             if q != 0:
+                defi.append(str(x.MCName))
                 p = qr.filter(MCSecArea=po.id).filter(MCDefArea=lo.id)
                 for x in p:
                     list2.append(x)

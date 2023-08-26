@@ -256,17 +256,17 @@ class DefiHome(LoginRequiredMixin, TemplateView):
 
 @login_required
 def DefiHome2(request):
-    dpc = DPC.objects.all().order_by('-Date')
+    dpc = DPC.objects.all().order_by('-POHDate')
     p = []
     for n in dpc:
         k = DPCRemark.objects.all().filter(DPCName=n.id).count()
         p.append([n,k])
-    tc = TC.objects.all().order_by('-Date')
+    tc = TC.objects.all().order_by('-POHDate')
     q = []
     for n in tc:
         k = TCRemark.objects.all().filter(TCName=n.id).count()
         q.append([n,k])
-    mc = MC.objects.all().order_by('-Date')
+    mc = MC.objects.all().order_by('-POHDate')
     r = []
     for n in mc:
         k = MCRemark.objects.all().filter(MCName=n.id).count()
@@ -287,17 +287,17 @@ def AddDPC(request):
         newDPC = DPC(DPCName=request.POST.get('DPCNum'),POHDate=request.POST.get('datepicker1'),Shop=Shop.objects.get(ShopName__icontains=str(request.POST.get('DPCShop'))),Shed=Shed.objects.get(ShedName__icontains=str(request.POST.get('DPCShed'))),author=request.user)
         newDPC.save()
         message = messages.success(request, "DPC Added ")
-        dpc = DPC.objects.all().order_by('-Date')
+        dpc = DPC.objects.all().order_by('-POHDate')
         p = []
         for n in dpc:
             k = DPCRemark.objects.all().filter(DPCName=n.id).count()
             p.append([n,k])
-        tc = TC.objects.all().order_by('-Date')
+        tc = TC.objects.all().order_by('-POHDate')
         q = []
         for n in tc:
             k = TCRemark.objects.all().filter(TCName=n.id).count()
             q.append([n,k])
-        mc = MC.objects.all().order_by('-Date')
+        mc = MC.objects.all().order_by('-POHDate')
         r = []
         for n in mc:
             k = MCRemark.objects.all().filter(MCName=n.id).count()
@@ -316,17 +316,17 @@ def AddDPC(request):
 
     else:
         message = messages.warning(request, "DPC Not Added ")
-        dpc = DPC.objects.all().order_by('-Date')
+        dpc = DPC.objects.all().order_by('-POHDate')
         p = []
         for n in dpc:
             k = DPCRemark.objects.all().filter(DPCName=n.id).count()
             p.append([n,k])
-        tc = TC.objects.all().order_by('-Date')
+        tc = TC.objects.all().order_by('-POHDate')
         q = []
         for n in tc:
             k = TCRemark.objects.all().filter(TCName=n.id).count()
             q.append([n,k])
-        mc = MC.objects.all().order_by('-Date')
+        mc = MC.objects.all().order_by('-POHDate')
         r = []
         for n in mc:
             k = MCRemark.objects.all().filter(MCName=n.id).count()
@@ -352,17 +352,17 @@ def AddTC(request):
         newTC = TC(TCName=request.POST.get('TCNum'),POHDate=request.POST.get('datepicker'),Shop=Shop.objects.get(ShopName__icontains=str(request.POST.get('TCShop'))),Shed=Shed.objects.get(ShedName__icontains=str(request.POST.get('TCShed'))),author=request.user)
         newTC.save()
         message = messages.success(request, "TC Added ")
-        dpc = DPC.objects.all().order_by('-Date')
+        dpc = DPC.objects.all().order_by('-POHDate')
         p = []
         for n in dpc:
             k = DPCRemark.objects.all().filter(DPCName=n.id).count()
             p.append([n,k])
-        tc = TC.objects.all().order_by('-Date')
+        tc = TC.objects.all().order_by('-POHDate')
         q = []
         for n in tc:
             k = TCRemark.objects.all().filter(TCName=n.id).count()
             q.append([n,k])
-        mc = MC.objects.all().order_by('-Date')
+        mc = MC.objects.all().order_by('-POHDate')
         r = []
         for n in mc:
             k = MCRemark.objects.all().filter(MCName=n.id).count()
@@ -381,17 +381,17 @@ def AddTC(request):
 
     else:
         message = messages.warning(request, "TC Not Added ")
-        dpc = DPC.objects.all().order_by('-Date')
+        dpc = DPC.objects.all().order_by('-POHDate')
         p = []
         for n in dpc:
             k = DPCRemark.objects.all().filter(DPCName=n.id).count()
             p.append([n,k])
-        tc = TC.objects.all().order_by('-Date')
+        tc = TC.objects.all().order_by('-POHDate')
         q = []
         for n in tc:
             k = TCRemark.objects.all().filter(TCName=n.id).count()
             q.append([n,k])
-        mc = MC.objects.all().order_by('-Date')
+        mc = MC.objects.all().order_by('-POHDate')
         r = []
         for n in mc:
             k = MCRemark.objects.all().filter(MCName=n.id).count()
@@ -413,17 +413,17 @@ def AddMC(request):
         newMC = MC(MCName=request.POST.get('MCNum'),POHDate=request.POST.get('datepicker2'),Shop=Shop.objects.get(ShopName__icontains=str(request.POST.get('MCShop'))),Shed=Shed.objects.get(ShedName__icontains=str(request.POST.get('MCShed'))),author=request.user)
         newMC.save()
         message = messages.success(request, "MC Added ")
-        dpc = DPC.objects.all().order_by('-Date')
+        dpc = DPC.objects.all().order_by('-POHDate')
         p = []
         for n in dpc:
             k = DPCRemark.objects.all().filter(DPCName=n.id).count()
             p.append([n,k])
-        tc = TC.objects.all().order_by('-Date')
+        tc = TC.objects.all().order_by('-POHDate')
         q = []
         for n in tc:
             k = TCRemark.objects.all().filter(TCName=n.id).count()
             q.append([n,k])
-        mc = MC.objects.all().order_by('-Date')
+        mc = MC.objects.all().order_by('-POHDate')
         r = []
         for n in mc:
             k = MCRemark.objects.all().filter(MCName=n.id).count()
@@ -441,17 +441,17 @@ def AddMC(request):
 
     else:
         message = messages.warning(request, "TC Not Added ")
-        dpc = DPC.objects.all().order_by('-Date')
+        dpc = DPC.objects.all().order_by('-POHDate')
         p = []
         for n in dpc:
             k = DPCRemark.objects.all().filter(DPCName=n.id).count()
             p.append([n,k])
-        tc = TC.objects.all().order_by('-Date')
+        tc = TC.objects.all().order_by('-POHDate')
         q = []
         for n in tc:
             k = TCRemark.objects.all().filter(TCName=n.id).count()
             q.append([n,k])
-        mc = MC.objects.all().order_by('-Date')
+        mc = MC.objects.all().order_by('-POHDate')
         r = []
         for n in mc:
             k = MCRemark.objects.all().filter(MCName=n.id).count()
