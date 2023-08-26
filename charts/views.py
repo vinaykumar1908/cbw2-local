@@ -20,8 +20,8 @@ def chartshome(request):
 def dpcchart(request):
     currdate = date.today()
     print(request.POST.get('datepicker6'))
-    qs6 = DPC.objects.all().order_by('-Date').filter(POHDate__lt=request.POST.get('datepicker1'), POHDate__gt=request.POST.get('datepicker2'))
-    qs4 = DPCRemark.objects.all().order_by('-Date').filter(POHDate__lt=request.POST.get('datepicker1'), POHDate__gt=request.POST.get('datepicker2'))
+    qs6 = DPC.objects.all().order_by('-POHDate').filter(POHDate__lt=request.POST.get('datepicker1'), POHDate__gt=request.POST.get('datepicker2'))
+    qs4 = DPCRemark.objects.all().order_by('-POHDate').filter(POHDate__lt=request.POST.get('datepicker1'), POHDate__gt=request.POST.get('datepicker2'))
     if request.POST.get('DPCPart'):
         lo = DPCArea.objects.get(DPCArea=request.POST.get('DPCPart'))
     if request.POST.get('DPCDef'):
@@ -161,8 +161,8 @@ def dpcchart(request):
 @login_required
 def tcchart(request):
     currdate = date.today()
-    qs6 = TC.objects.all().order_by('-Date').filter(POHDate__lt=request.POST.get('datepicker4'), POHDate__gt=request.POST.get('datepicker3'))
-    qs4 = TCRemark.objects.all().order_by('-Date').filter(POHDate__lt=request.POST.get('datepicker4'), POHDate__gt=request.POST.get('datepicker3'))
+    qs6 = TC.objects.all().order_by('-POHDate').filter(POHDate__lt=request.POST.get('datepicker4'), POHDate__gt=request.POST.get('datepicker3'))
+    qs4 = TCRemark.objects.all().order_by('-POHDate').filter(POHDate__lt=request.POST.get('datepicker4'), POHDate__gt=request.POST.get('datepicker3'))
     if request.POST.get('TCPart'):
         lo = TCArea.objects.get(TCCArea=request.POST.get('TCPart'))
     print(request.POST.get('TCDef'))
@@ -304,8 +304,8 @@ def tcchart(request):
 def mcchart(request):
     currdate = date.today()
     print(request.POST.get('datepicker6'))
-    qs6 = MC.objects.all().order_by('-Date').filter(POHDate__lt=request.POST.get('datepicker6'), POHDate__gt=request.POST.get('datepicker5'))
-    qs4 = MCRemark.objects.all().order_by('-Date').filter(POHDate__lt=request.POST.get('datepicker6'), POHDate__gt=request.POST.get('datepicker5'))
+    qs6 = MC.objects.all().order_by('-POHDate').filter(POHDate__lt=request.POST.get('datepicker6'), POHDate__gt=request.POST.get('datepicker5'))
+    qs4 = MCRemark.objects.all().order_by('-POHDate').filter(POHDate__lt=request.POST.get('datepicker6'), POHDate__gt=request.POST.get('datepicker5'))
     if request.POST.get('MCPart'):
         lo = MCArea.objects.get(MCArea=request.POST.get('MCPart'))
     if request.POST.get('MCDef'):
