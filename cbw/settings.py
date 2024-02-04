@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rake.apps.RakeConfig',
     'crispy_forms',
     'defi.apps.DefiConfig',
+    'bogieandwheel.apps.BogieandwheelConfig',
 ]
 
 MIDDLEWARE = [

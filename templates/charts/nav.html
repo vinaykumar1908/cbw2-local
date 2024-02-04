@@ -41,10 +41,45 @@
             href="{% url 'chartshome'%}">Charts Home</a>
         </div>
       </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle"
+          style="color:rgb(255, 255, 255); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:0px;"
+          href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Wheel and Bogie
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item"
+            style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
+            href="{% url 'defi_home'%}">Add a Bogie</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item"
+            style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
+            href="{% url 'rakehome'%}">Overhaul my Wheel</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item"
+            style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
+            href="{% url 'chartshome'%}">IOH my Bogie</a>
+            <div class="dropdown-divider"></div>
+          <a class="dropdown-item"
+            style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
+            href="{% url 'chartshome'%}">Assemble and Dispatch</a>
+            <div class="dropdown-divider"></div>
+          <a class="dropdown-item"
+            style="background-color:rgb(255, 255, 255); color:rgb(0, 0, 0); font-weight: 500; font-size: 12px; margin-right:0px; margin-top:5px;"
+            href="{% url 'chartshome'%}">WTA</a>
+
+        </div>
+      </li>
       {% endif %}
       
 
     </ul>
+
+   
+
+      
+     
     
     <div>
       {% if user.is_authenticated %}

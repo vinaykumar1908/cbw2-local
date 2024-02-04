@@ -6,6 +6,7 @@ urlpatterns = [
     path('charts/', include('charts.urls')),
     path('defi/', include('defi.urls')),
     path('rake/', include('rake.urls')),
+    path('bogieandwheel/', include('bogieandwheel.urls')),
     #path('ROH/', include('ROH.urls')),
     #path('sickline/', include('sickline.urls')),
     #path('yard/', include('yard.urls')),
